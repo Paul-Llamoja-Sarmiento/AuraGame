@@ -6,4 +6,6 @@ Build
 
 .vscode
 .vs
+.vsconfig
+.idea
 *.sln
