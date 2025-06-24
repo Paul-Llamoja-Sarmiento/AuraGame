@@ -14,7 +14,7 @@ class UInputMappingContext;
 /**
  * 
  */
-UCLASS()
+UCLASS(Abstract)
 class AURAGAME_API AAuraPlayerController : public APlayerController
 {
 	GENERATED_BODY()

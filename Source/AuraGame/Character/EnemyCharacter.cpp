@@ -4,18 +4,5 @@
 
 AEnemyCharacter::AEnemyCharacter()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 }
-
-
-void AEnemyCharacter::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
-
-void AEnemyCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-

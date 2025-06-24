@@ -5,17 +5,11 @@
 #include "Base/AuraCharacterBase.h"
 #include "EnemyCharacter.generated.h"
 
-UCLASS()
+UCLASS(Abstract)
 class AURAGAME_API AEnemyCharacter : public AAuraCharacterBase
 {
 	GENERATED_BODY()
 
 public:
 	AEnemyCharacter();
-
-protected:
-	virtual void BeginPlay() override;
-
-public:
-	virtual void Tick(float DeltaTime) override;
 };

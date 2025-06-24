@@ -5,7 +5,7 @@
 #include "Base/AuraCharacterBase.h"
 #include "AuraCharacter.generated.h"
 
-UCLASS()
+UCLASS(Abstract)
 class AURAGAME_API AAuraCharacter : public AAuraCharacterBase
 {
 	GENERATED_BODY()
@@ -14,10 +14,9 @@ public:
 	AAuraCharacter();
 
 protected:
-	virtual void BeginPlay() override;
+	virtual void BeginPlay() override;	
 
-public:
-	virtual void Tick(float DeltaTime) override;
-
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+private:
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float BaseTurnRate = 400.0f;	
 };
