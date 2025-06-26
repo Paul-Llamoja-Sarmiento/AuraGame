@@ -9,6 +9,7 @@
 
 AAuraPlayerController::AAuraPlayerController()
 {
+	bReplicates = true;
 }
 
 void AAuraPlayerController::PlayerTick(float DeltaTime)
@@ -22,10 +23,10 @@ void AAuraPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ensure(IsValid(AuraMappingContext));
+	check(IsValid(AuraMappingContext));
 
 	auto MappingSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
-	ensure(IsValid(MappingSubsystem));
+	check(IsValid(MappingSubsystem));
 
 	MappingSubsystem->AddMappingContext(AuraMappingContext, 0);
 
