@@ -15,7 +15,7 @@ class AURAGAME_API UAuraUserWidget : public UUserWidget, public IAuraUserWidgetI
 	GENERATED_BODY()
 
 public:
-	virtual void ISetWidgetController_Implementation(UObject* InWidgetController);
+	virtual void ISetWidgetController_Implementation(UObject* InWidgetController) override;
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
