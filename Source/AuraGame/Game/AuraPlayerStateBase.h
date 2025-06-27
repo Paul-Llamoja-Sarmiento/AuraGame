@@ -15,7 +15,7 @@ class UAbilitySystemComponent;
 /**
  * 
  */
-UCLASS()
+UCLASS(Abstract)
 class AURAGAME_API AAuraPlayerStateBase : public APlayerState, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
