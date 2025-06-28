@@ -2,7 +2,7 @@
 #include "AuraCharacter.h"
 
 #include "AbilitySystemComponent.h"
-#include "AuraGame/Game/AuraPlayerStateBase.h"
+#include "AuraGame/Player/AuraPlayerStateBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 
