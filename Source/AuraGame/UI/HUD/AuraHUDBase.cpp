@@ -23,6 +23,7 @@ void AAuraHUDBase::IInitOverlay_Implementation(APlayerController* InPC, APlayerS
 	const FWidgetControllerParams Params(InPC, InPS, InASC, InAS);
 	OverlayWidgetController = GetOverlayWidgetController(Params);
 	IAuraUserWidgetInterface::Execute_ISetWidgetController(Widget, OverlayWidgetController);
+	OverlayWidgetController->BroadcastInitialValues();
 	
 	Widget->AddToViewport();
 }

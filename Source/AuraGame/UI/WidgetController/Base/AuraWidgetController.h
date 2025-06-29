@@ -45,7 +45,7 @@ struct FWidgetControllerParams
 /**
  * 
  */
-UCLASS()
+UCLASS(Abstract, Blueprintable)
 class AURAGAME_API UAuraWidgetController : public UObject
 {
 	GENERATED_BODY()
@@ -53,6 +53,8 @@ class AURAGAME_API UAuraWidgetController : public UObject
 public:
 	UFUNCTION()
 	void InitializeAuraWidgetController(const FWidgetControllerParams& InParams);
+
+	virtual void BroadcastInitialValues() {}
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
