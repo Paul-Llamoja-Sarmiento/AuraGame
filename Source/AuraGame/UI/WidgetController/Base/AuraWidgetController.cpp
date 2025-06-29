@@ -8,4 +8,6 @@ void UAuraWidgetController::InitializeAuraWidgetController(const FWidgetControll
 	PlayerState = InParams.PlayerState;
 	AbilitySystemComponent = InParams.AbilitySystemComponent;
 	AttributeSet = InParams.AttributeSet;
+
+	BindCallbacksToDependencies();
 }

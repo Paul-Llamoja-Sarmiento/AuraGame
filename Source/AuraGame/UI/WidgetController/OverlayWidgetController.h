@@ -6,6 +6,10 @@
 #include "Base/AuraWidgetController.h"
 #include "OverlayWidgetController.generated.h"
 
+
+struct FOnAttributeChangeData;
+
+
 /**
  * 
  */
@@ -24,9 +28,9 @@ public:
 	virtual void IUnbindFromOnMaxHealthChanged_Implementation(const FMaxHealthChangedSignature& Event) override;
 	virtual void IUnbindFromOnManaChanged_Implementation(const FManaChangedSignature& Event) override;
 	virtual void IUnbindFromOnMaxManaChanged_Implementation(const FMaxManaChangedSignature& Event) override;
-	
-	virtual void BroadcastInitialValues() override;
 
+	// UAuraWidgetController
+	virtual void BroadcastInitialValues() override;
 
 protected:
 	UPROPERTY()
@@ -40,4 +44,12 @@ protected:
 
 	UPROPERTY()
 	FOnMaxManaChangedSignature OnMaxManaChanged;
+
+	virtual void BindCallbacksToDependencies() override;
+
+private:
+	void OnHealthChangedCallback(const FOnAttributeChangeData& Data) const;
+	void OnMaxHealthChangedCallback(const FOnAttributeChangeData& Data) const;
+	void OnManaChangedCallback(const FOnAttributeChangeData& Data) const;
+	void OnMaxManaChangedCallback(const FOnAttributeChangeData& Data) const;
 };
