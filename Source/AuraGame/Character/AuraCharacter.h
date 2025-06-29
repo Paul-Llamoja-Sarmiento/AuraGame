@@ -30,4 +30,6 @@ private:
 	 * Do NOT call from the constructor — ASC setup depends on replicated data (PlayerState).
 	 */
 	void InitializeAbilityActorInfo();
+
+	void InitializeHUD() const;
 };
