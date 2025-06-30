@@ -23,7 +23,7 @@ void AAuraPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	check(IsValid(AuraMappingContext));
+	check(AuraMappingContext);
 
 	auto MappingSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
 	if (IsValid(MappingSubsystem))

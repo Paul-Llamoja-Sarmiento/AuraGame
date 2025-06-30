@@ -49,7 +49,7 @@ void AAuraCharacter::BeginPlay()
 void AAuraCharacter::InitializeAbilityActorInfo()
 {
 	AAuraPlayerStateBase* AuraPlayerState = GetPlayerState<AAuraPlayerStateBase>();
-	check(IsValid(AuraPlayerState));
+	check(AuraPlayerState);
 	AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
 	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
 	AttributeSet = AuraPlayerState->GetAttributeSet();
