@@ -16,8 +16,11 @@ public:
 	AEffectActor();
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effect")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Applied Effect")
 	TSubclassOf<UGameplayEffect> InstantGameplayEffectClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Applied Effect")
+	TSubclassOf<UGameplayEffect> DurationGameplayEffectClass;
 
 	UFUNCTION(BlueprintCallable)
 	void ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass) const;
