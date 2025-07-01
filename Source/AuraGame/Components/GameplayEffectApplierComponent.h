@@ -31,7 +31,10 @@ struct FEffectApplicationConfig
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GAS")
-	TSubclassOf<UGameplayEffect> GameplayEffect;
+	TSubclassOf<UGameplayEffect> GameplayEffect = nullptr;
+	
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GAS")
+    float GameplayEffectLevel = 1.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GAS")
 	EEffectApplicationPolicy ApplicationPolicy = EEffectApplicationPolicy::ApplyOnOverlap;
@@ -64,7 +67,7 @@ protected:
 	FName CollisionVolumeTag = "effect-applier-collision-volume";
 
 	UPROPERTY(EditAnywhere, Category = "Applied Effects")
-	bool bShouldDestroyAfterApplyEffects = true;
+	bool bDestroyActorAfterApplyEffects = true;
 
 	UFUNCTION()
 	void OnBeginOverlapHandle(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,

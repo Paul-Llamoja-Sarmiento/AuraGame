@@ -20,7 +20,8 @@ void UGameplayEffectApplierComponent::OnBeginOverlapHandle(UPrimitiveComponent* 
 	{
 		return;
 	}
-	
+
+	bool bHasAppliedEffects = false;
 	for (const auto& EffectConfig : EffectsToApply)
 	{
 		if (EffectConfig.ApplicationPolicy == EEffectApplicationPolicy::DoNotApply)
@@ -31,10 +32,11 @@ void UGameplayEffectApplierComponent::OnBeginOverlapHandle(UPrimitiveComponent* 
 		if (EffectConfig.ApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
 		{
 			ApplyEffectToTarget(TargetASC, EffectConfig);
+			bHasAppliedEffects = true;
 		}
 	}
 
-	if (bShouldDestroyAfterApplyEffects)
+	if (bDestroyActorAfterApplyEffects && bHasAppliedEffects)
 	{
 		GetOwner()->Destroy();
 	}
@@ -49,25 +51,29 @@ void UGameplayEffectApplierComponent::OnEndOverlapHandle(UPrimitiveComponent* Ov
 		return;
 	}
 
+	bool bHasAppliedEffects = false;
+	bool bShouldRemoveEffects = false;
+	
 	for (const auto& EffectConfig : EffectsToApply)
 	{
-		if (EffectConfig.ApplicationPolicy == EEffectApplicationPolicy::DoNotApply)
-		{
-			continue;
-		}
-
 		if (EffectConfig.ApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
 		{
 			ApplyEffectToTarget(TargetASC, EffectConfig);
+			bHasAppliedEffects = true;
 		}
 
 		if (EffectConfig.RemovalPolicy == EEffectRemovalPolicy::RemoveOnEndOverlap)
 		{
-			RemoveEffectsFromTarget(TargetASC);
+			bShouldRemoveEffects = true;
 		}
 	}
 
-	if (bShouldDestroyAfterApplyEffects)
+	if (bShouldRemoveEffects)
+	{
+		RemoveEffectsFromTarget(TargetASC);
+	}
+
+	if (bDestroyActorAfterApplyEffects && bHasAppliedEffects)
 	{
 		GetOwner()->Destroy();
 	}
@@ -90,7 +96,7 @@ void UGameplayEffectApplierComponent::ApplyEffectToTarget(UAbilitySystemComponen
 	FGameplayEffectContextHandle EffectContextHandle = TargetASC->MakeEffectContext();
 	EffectContextHandle.AddSourceObject(this);
 	const FGameplayEffectSpecHandle EffectSpecHandle = TargetASC->MakeOutgoingSpec(
-		EffectConfig.GameplayEffect, 1.0f, EffectContextHandle);
+		EffectConfig.GameplayEffect, EffectConfig.GameplayEffectLevel, EffectContextHandle);
 
 	FActiveGameplayEffectHandle ActiveEffectHandle = TargetASC->ApplyGameplayEffectSpecToSelf(
 		*EffectSpecHandle.Data);
