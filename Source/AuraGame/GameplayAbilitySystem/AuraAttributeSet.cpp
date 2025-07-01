@@ -1,6 +1,9 @@
 ﻿
 #include "AuraAttributeSet.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "GameplayEffectExtension.h"
+#include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
 
 UAuraAttributeSet::UAuraAttributeSet()
@@ -21,6 +24,81 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Mana, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
+}
+
+
+void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
+{
+	Super::PreAttributeChange(Attribute, NewValue);
+
+	// This function is called before an attribute value is changed,
+	// allowing us to clamp or modify when the CURRENT_VALUE is changed.
+
+}
+
+
+void UAuraAttributeSet::SetGameplayEffectProperties(const FGameplayEffectModCallbackData& Data,
+	FGameplayEffectProperties& Properties) const
+{
+	Properties.EffectContextHandle = Data.EffectSpec.GetContext();
+	Properties.SourceASC = Properties.EffectContextHandle.GetOriginalInstigatorAbilitySystemComponent();
+	if (IsValid(Properties.SourceASC) &&
+		Properties.SourceASC->AbilityActorInfo.IsValid() &&
+		Properties.SourceASC->AbilityActorInfo->AvatarActor.IsValid())
+	{
+		Properties.SourceAvatarActor = Properties.SourceASC->AbilityActorInfo->AvatarActor.Get();
+		Properties.SourceController = Properties.SourceASC->AbilityActorInfo->PlayerController.Get();
+		if (Properties.SourceController == nullptr && Properties.SourceAvatarActor != nullptr)
+		{
+			if (const APawn* Pawn = Cast<const APawn>(Properties.SourceAvatarActor))
+			{
+				Properties.SourceController = Pawn->GetController();
+			}
+		}
+
+		if (Properties.SourceController)
+		{
+			Properties.SourceCharacter = Cast<ACharacter>(Properties.SourceController->GetPawn());
+		}
+	}
+
+	if (Data.Target.AbilityActorInfo.IsValid() && Data.Target.AbilityActorInfo->AvatarActor.IsValid())
+	{
+		Properties.TargetAvatarActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
+		Properties.TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
+		Properties.TargetCharacter = Cast<ACharacter>(Properties.TargetAvatarActor);
+		Properties.TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Properties.TargetAvatarActor);
+	}
+}
+
+
+void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data)
+{
+	Super::PostGameplayEffectExecute(Data);
+
+	/**
+	 * Only triggered after changes to the BASE_VALUE of an Attribute from an instant GameplayEffect.
+	 * This is a valid place to do more Attribute manipulation when they change from a GameplayEffect.
+	 * This is also a valid place to store a lot of useful data to our FGameplayEffectProperties struct.
+	 *
+	 * Note: When PostGameplayEffectExecute() is called, changes to the Attribute have already happened,
+	 * but they have not replicated back to clients yet, so clamping values here will not cause
+	 * two network updates to clients. Clients will only receive the update after clamping. 
+	 */
+	
+	// Data storaging
+	FGameplayEffectProperties Properties;
+	SetGameplayEffectProperties(Data, Properties);
+
+	// Attribute clamping
+	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+	{
+		SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
+	}
+	else if (Data.EvaluatedData.Attribute == GetManaAttribute())
+	{
+		SetMana(FMath::Clamp(GetMana(), 0.0f, GetMaxMana()));
+	} 
 }
 
 void UAuraAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const
