@@ -1,0 +1,23 @@
+﻿
+#pragma once
+
+#include "NativeGameplayTags.h"
+
+
+// Attribute Tags
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attributes_Vital_Health);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attributes_Vital_Mana);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attributes_Vital_MaxHealth);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attributes_Vital_MaxMana);
+
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attributes_Primary_Strength);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attributes_Primary_Intelligence);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attributes_Primary_Resilience);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attributes_Primary_Vigor);
+
+
+// Game Effects Tags
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Source_Item_HealthPotion);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Source_Item_ManaPotion);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Source_Item_HealthCrystal);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Source_Item_ManaCrystal);
