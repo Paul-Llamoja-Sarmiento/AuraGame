@@ -1,17 +1,17 @@
 ﻿
-#include "AuraPlayerStateBase.h"
+#include "PlayerStateBase.h"
 
 #include "AuraGame/GameplayAbilitySystem/AuraAbilitySystemComponent.h"
 #include "AuraGame/GameplayAbilitySystem/AuraAttributeSet.h"
 
-AAuraPlayerStateBase::AAuraPlayerStateBase()
+APlayerStateBase::APlayerStateBase()
 {
 	// GAS requires frequent net updates for abilities and effects to sync properly.
 	SetNetUpdateFrequency(100.0f);
 	CreateGameplayAbilitySystemObjects();
 }
 
-void AAuraPlayerStateBase::CreateGameplayAbilitySystemObjects()
+void APlayerStateBase::CreateGameplayAbilitySystemObjects()
 {
 	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	AbilitySystemComponent->SetIsReplicated(true);

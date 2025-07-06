@@ -1,8 +1,8 @@
 ﻿
-#include "AuraWidgetController.h"
+#include "WidgetControllerBase.h"
 
 
-void UAuraWidgetController::InitializeAuraWidgetController(const FWidgetControllerParams& InParams)
+void UWidgetControllerBase::InitializeAuraWidgetController(const FWidgetControllerParams& InParams)
 {
 	PlayerController = InParams.PlayerController;
 	PlayerState = InParams.PlayerState;

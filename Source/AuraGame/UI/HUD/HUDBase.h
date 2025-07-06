@@ -2,23 +2,23 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AuraHUDInterface.h"
+#include "HUDInterface.h"
 #include "GameFramework/HUD.h"
-#include "AuraHUDBase.generated.h"
+#include "HUDBase.generated.h"
 
 
 class UAttributeSet;
 class UAbilitySystemComponent;
 struct FWidgetControllerParams;
 class UOverlayWidgetController;
-class UAuraUserWidget;
+class UUserWidgetBase;
 
 
 /**
  * 
  */
 UCLASS(Abstract)
-class AURAGAME_API AAuraHUDBase : public AHUD, public IAuraHUDInterface
+class AURAGAME_API AHUDBase : public AHUD, public IHUDInterface
 {
 	GENERATED_BODY()
 
@@ -27,13 +27,13 @@ public:
 
 protected:
 	UPROPERTY()
-	TObjectPtr<UAuraUserWidget> OverlayWidget;
+	TObjectPtr<UUserWidgetBase> OverlayWidget;
 
 	UOverlayWidgetController* GetOverlayWidgetController(const FWidgetControllerParams& InParams);
 	
 private:
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<UAuraUserWidget> OverlayWidgetClass;
+	TSubclassOf<UUserWidgetBase> OverlayWidgetClass;
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UOverlayWidgetController> OverlayWidgetControllerClass;

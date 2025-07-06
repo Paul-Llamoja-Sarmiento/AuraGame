@@ -1,5 +1,5 @@
 ﻿
-#include "AuraPlayerController.h"
+#include "PlayerControllerBase.h"
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -7,28 +7,28 @@
 #include "AuraGame/Interaction/HighlightableActor.h"
 
 
-AAuraPlayerController::AAuraPlayerController()
+APlayerControllerBase::APlayerControllerBase()
 {
 	bReplicates = true;
 }
 
-void AAuraPlayerController::PlayerTick(float DeltaTime)
+void APlayerControllerBase::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 
 	CursorTrace();
 }
 
-void AAuraPlayerController::BeginPlay()
+void APlayerControllerBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	check(AuraMappingContext);
+	check(MappingContext);
 
 	auto MappingSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
 	if (IsValid(MappingSubsystem))
 	{
-		MappingSubsystem->AddMappingContext(AuraMappingContext, 0);
+		MappingSubsystem->AddMappingContext(MappingContext, 0);
 	}
 
 	bShowMouseCursor = true;
@@ -40,15 +40,15 @@ void AAuraPlayerController::BeginPlay()
 	SetInputMode(InputMode);
 }
 
-void AAuraPlayerController::SetupInputComponent()
+void APlayerControllerBase::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
 	auto EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
-	EnhancedInputComponent->BindAction(AuraMoveInputAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
+	EnhancedInputComponent->BindAction(MoveInputAction, ETriggerEvent::Triggered, this, &APlayerControllerBase::Move);
 }
 
-void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
+void APlayerControllerBase::Move(const FInputActionValue& InputActionValue)
 {
 	APawn* ControlledPawn = GetPawn();
 	if (!IsValid(ControlledPawn))
@@ -65,7 +65,7 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 	ControlledPawn->AddMovementInput(RightDirection, MoveValue.X);
 }
 
-void AAuraPlayerController::CursorTrace()
+void APlayerControllerBase::CursorTrace()
 {
 	FHitResult CursorHitResult;
 	GetHitResultUnderCursor(ECC_Visibility, false, CursorHitResult);

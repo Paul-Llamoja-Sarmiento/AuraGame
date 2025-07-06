@@ -3,7 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "AuraHUDInterface.generated.h"
+#include "HUDInterface.generated.h"
 
 
 class UAttributeSet;
@@ -12,7 +12,7 @@ class UAbilitySystemComponent;
 
 // This class does not need to be modified.
 UINTERFACE()
-class UAuraHUDInterface : public UInterface
+class UHUDInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -20,7 +20,7 @@ class UAuraHUDInterface : public UInterface
 /**
  * 
  */
-class AURAGAME_API IAuraHUDInterface
+class AURAGAME_API IHUDInterface
 {
 	GENERATED_BODY()
 

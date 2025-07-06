@@ -3,7 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
-#include "AuraWidgetController.generated.h"
+#include "WidgetControllerBase.generated.h"
 
 
 class UAttributeSet;
@@ -50,7 +50,7 @@ struct FWidgetControllerParams
  * 
  */
 UCLASS(Abstract, Blueprintable)
-class AURAGAME_API UAuraWidgetController : public UObject
+class AURAGAME_API UWidgetControllerBase : public UObject
 {
 	GENERATED_BODY()
 	

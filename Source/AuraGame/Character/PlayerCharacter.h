@@ -2,16 +2,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Base/AuraCharacterBase.h"
-#include "AuraCharacter.generated.h"
+#include "Base/CharacterBase.h"
+#include "PlayerCharacter.generated.h"
 
 UCLASS(Abstract)
-class AURAGAME_API AAuraCharacter : public AAuraCharacterBase
+class AURAGAME_API APlayerCharacter : public ACharacterBase
 {
 	GENERATED_BODY()
 
 public:
-	AAuraCharacter();
+	APlayerCharacter();
 
 	virtual void PossessedBy(AController* NewController) override;
 

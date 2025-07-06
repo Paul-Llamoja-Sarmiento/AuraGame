@@ -1,12 +1,12 @@
 ﻿
-#include "AuraHUDBase.h"
+#include "HUDBase.h"
 
 
-#include "AuraGame/UI/Widget/Base/AuraUserWidget.h"
+#include "AuraGame/UI/Widget/Base/UserWidgetBase.h"
 #include "AuraGame/UI/WidgetController/OverlayWidgetController.h"
 
 
-void AAuraHUDBase::IInitOverlay_Implementation(APlayerController* InPC, APlayerState* InPS,
+void AHUDBase::IInitOverlay_Implementation(APlayerController* InPC, APlayerState* InPS,
 	UAbilitySystemComponent* InASC, UAttributeSet* InAS)
 {
 	checkf(OverlayWidgetClass, TEXT("OverlayWidgetClass must be set in AAuraHUDBase!"));
@@ -19,7 +19,7 @@ void AAuraHUDBase::IInitOverlay_Implementation(APlayerController* InPC, APlayerS
 	Widget->AddToViewport();
 }
 
-UOverlayWidgetController* AAuraHUDBase::GetOverlayWidgetController(const FWidgetControllerParams& InParams)
+UOverlayWidgetController* AHUDBase::GetOverlayWidgetController(const FWidgetControllerParams& InParams)
 {
 	if (!IsValid(OverlayWidgetController))
 	{

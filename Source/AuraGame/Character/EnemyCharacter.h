@@ -3,11 +3,11 @@
 
 #include "CoreMinimal.h"
 #include "AuraGame/Interaction/HighlightableActor.h"
-#include "Base/AuraCharacterBase.h"
+#include "Base/CharacterBase.h"
 #include "EnemyCharacter.generated.h"
 
 UCLASS(Abstract)
-class AURAGAME_API AEnemyCharacter : public AAuraCharacterBase, public IHighlightableActor
+class AURAGAME_API AEnemyCharacter : public ACharacterBase, public IHighlightableActor
 {
 	GENERATED_BODY()
 

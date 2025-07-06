@@ -1,8 +1,8 @@
 
-#include "AuraCharacterBase.h"
+#include "CharacterBase.h"
 
 
-AAuraCharacterBase::AAuraCharacterBase()
+ACharacterBase::ACharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
@@ -12,7 +12,7 @@ AAuraCharacterBase::AAuraCharacterBase()
 }
 
 
-void AAuraCharacterBase::BeginPlay()
+void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	

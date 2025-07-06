@@ -30,25 +30,60 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetHealthAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
 		{
-			IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget,Attributes_Vital_Health, Data.NewValue);
+			if (IsValid(ControlledWidget))
+			{
+				IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget,Attributes_Vital_Health, Data.NewValue);
+			}
+				
 		}
 		);
+	
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxHealthAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
 		{
-			IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget,Attributes_Vital_MaxHealth, Data.NewValue);
+			if (IsValid(ControlledWidget))
+			{
+				IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget,Attributes_Vital_MaxHealth, Data.NewValue);
+			}
 		}
 		);
+	
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetManaAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
 		{
-			IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget,Attributes_Vital_Mana, Data.NewValue);
+			if (IsValid(ControlledWidget))
+			{
+				IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget,Attributes_Vital_Mana, Data.NewValue);
+			}
 		}
 		);
+	
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxManaAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
 		{
-			IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget,Attributes_Vital_MaxMana, Data.NewValue);
+			if (IsValid(ControlledWidget))
+			{
+				IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget,Attributes_Vital_MaxMana, Data.NewValue);
+			}
 		}
-		);
+	);
+
+	AbilitySystemComponent->OnGameplayEffectAppliedDelegateToSelf.AddUObject(
+		this, &UOverlayWidgetController::OnGameplayEffectAppliedToSelfHandle);
 }
+
+
+void UOverlayWidgetController::OnGameplayEffectAppliedToSelfHandle(UAbilitySystemComponent* ASC,
+                                                                   const FGameplayEffectSpec& EffectSpec,
+                                                                   FActiveGameplayEffectHandle ActiveEffectHandle)
+{
+	FGameplayTagContainer TagContainer;
+	EffectSpec.GetAllAssetTags(TagContainer);
+	for (const auto& Tag : TagContainer)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,
+		                                 FString::Printf(
+			                                 TEXT("GameplayEffectAppliedToSelfCallback: %s"), *Tag.ToString()));
+	}
+}
+

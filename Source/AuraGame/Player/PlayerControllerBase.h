@@ -4,7 +4,7 @@
 #include "CoreMinimal.h"
 #include "InputActionValue.h"
 #include "GameFramework/PlayerController.h"
-#include "AuraPlayerController.generated.h"
+#include "PlayerControllerBase.generated.h"
 
 
 class IHighlightableActor;
@@ -16,12 +16,12 @@ class UInputMappingContext;
  * 
  */
 UCLASS(Abstract)
-class AURAGAME_API AAuraPlayerController : public APlayerController
+class AURAGAME_API APlayerControllerBase : public APlayerController
 {
 	GENERATED_BODY()
 
 public:
-	AAuraPlayerController();
+	APlayerControllerBase();
 
 	virtual void PlayerTick(float DeltaTime) override;
 
@@ -32,10 +32,10 @@ protected:
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")
-	TObjectPtr<UInputMappingContext> AuraMappingContext;
+	TObjectPtr<UInputMappingContext> MappingContext;
 
 	UPROPERTY(EditAnywhere, Category = "Input")
-	TObjectPtr<UInputAction> AuraMoveInputAction;
+	TObjectPtr<UInputAction> MoveInputAction;
 
 	UPROPERTY()
 	TScriptInterface<IHighlightableActor> LastHighlightedActor;

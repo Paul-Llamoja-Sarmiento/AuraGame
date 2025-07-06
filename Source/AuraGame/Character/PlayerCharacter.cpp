@@ -1,15 +1,15 @@
 ﻿
-#include "AuraCharacter.h"
+#include "PlayerCharacter.h"
 
 #include "AbilitySystemComponent.h"
-#include "AuraGame/Player/AuraPlayerStateBase.h"
-#include "AuraGame/UI/HUD/AuraHUDInterface.h"
+#include "AuraGame/Player/PlayerStateBase.h"
+#include "AuraGame/UI/HUD/HUDInterface.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/HUD.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 
-AAuraCharacter::AAuraCharacter()
+APlayerCharacter::APlayerCharacter()
 {
 	// Basic setup for top-down character movement
 	GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -21,7 +21,7 @@ AAuraCharacter::AAuraCharacter()
 	bUseControllerRotationRoll = false;
 }
 
-void AAuraCharacter::PossessedBy(AController* NewController)
+void APlayerCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
@@ -30,7 +30,7 @@ void AAuraCharacter::PossessedBy(AController* NewController)
 	InitializeAbilityActorInfo();
 }
 
-void AAuraCharacter::OnRep_PlayerState()
+void APlayerCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
 
@@ -39,16 +39,16 @@ void AAuraCharacter::OnRep_PlayerState()
 	InitializeAbilityActorInfo();
 }
 
-void AAuraCharacter::BeginPlay()
+void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, BaseTurnRate, 0.0f);
 }
 
-void AAuraCharacter::InitializeAbilityActorInfo()
+void APlayerCharacter::InitializeAbilityActorInfo()
 {
-	AAuraPlayerStateBase* AuraPlayerState = GetPlayerState<AAuraPlayerStateBase>();
+	APlayerStateBase* AuraPlayerState = GetPlayerState<APlayerStateBase>();
 	check(AuraPlayerState);
 	AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
 	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
@@ -59,7 +59,7 @@ void AAuraCharacter::InitializeAbilityActorInfo()
 	InitializeHUD();
 }
 
-void AAuraCharacter::InitializeHUD() const
+void APlayerCharacter::InitializeHUD() const
 {
 	APlayerController* PC = GetController<APlayerController>();
 	if (!IsValid(PC))
@@ -68,10 +68,10 @@ void AAuraCharacter::InitializeHUD() const
 	}
 
 	AHUD* HUD = PC->GetHUD();
-	if (!IsValid(HUD) || !UKismetSystemLibrary::DoesImplementInterface(HUD, UAuraHUDInterface::StaticClass()))
+	if (!IsValid(HUD) || !UKismetSystemLibrary::DoesImplementInterface(HUD, UHUDInterface::StaticClass()))
 	{
 		return;
 	}
 
-	IAuraHUDInterface::Execute_IInitOverlay(HUD, PC, GetPlayerState(), AbilitySystemComponent, AttributeSet);
+	IHUDInterface::Execute_IInitOverlay(HUD, PC, GetPlayerState(), AbilitySystemComponent, AttributeSet);
 }
