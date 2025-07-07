@@ -1,16 +1,14 @@
-﻿
+﻿// 
+
 #pragma once
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "OverlayWidgetInterface.generated.h"
-
-class UUserWidgetBase;
-struct FGameplayTag;
+#include "EffectMessageWidgetInterface.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE()
-class UOverlayWidgetInterface : public UInterface
+class UEffectMessageWidgetInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -18,16 +16,15 @@ class UOverlayWidgetInterface : public UInterface
 /**
  * 
  */
-class AURAGAME_API IOverlayWidgetInterface
+class AURAGAME_API IEffectMessageWidgetInterface
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void IUpdateVitalAttribute(const FGameplayTag& AttributeTag, float NewValue);
+	void IInitializeMessageWidget(const FText& NewText, UTexture2D* NewTexture);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void IDisplayUIMessage(const FText& Message, TSubclassOf<UUserWidgetBase> WidgetClass, UTexture2D* MessageIcon);
-	
+	void IStartMessageAnimation();
 };

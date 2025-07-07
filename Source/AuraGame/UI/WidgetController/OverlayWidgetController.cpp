@@ -3,6 +3,7 @@
 
 #include "AuraGame/AuraGameplayTags.h"
 #include "AuraGame/GameplayAbilitySystem/AuraAttributeSet.h"
+#include "AuraGame/UI/Data/UIMessageData.h"
 #include "AuraGame/UI/Widget/OverlayWidgetInterface.h"
 
 
@@ -81,9 +82,15 @@ void UOverlayWidgetController::OnGameplayEffectAppliedToSelfHandle(UAbilitySyste
 	EffectSpec.GetAllAssetTags(TagContainer);
 	for (const auto& Tag : TagContainer)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,
-		                                 FString::Printf(
-			                                 TEXT("GameplayEffectAppliedToSelfCallback: %s"), *Tag.ToString()));
+		if (!UIMessagesMap.Contains(Tag) || !IsValid(ControlledWidget))
+		{
+			return;
+		}
+
+		IOverlayWidgetInterface::Execute_IDisplayUIMessage(ControlledWidget,
+		                                                   UIMessagesMap[Tag]->MessageText,
+		                                                   UIMessagesMap[Tag]->MessageWidget,
+		                                                   UIMessagesMap[Tag]->MessageIcon);
 	}
 }
 

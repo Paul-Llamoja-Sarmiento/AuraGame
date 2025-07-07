@@ -16,8 +16,10 @@ UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attributes_Primary_Resilience);
 UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attributes_Primary_Vigor);
 
 
-// Game Effects Tags
-UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Source_Item_HealthPotion);
-UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Source_Item_ManaPotion);
-UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Source_Item_HealthCrystal);
-UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Source_Item_ManaCrystal);
+// UI Message Tags
+// Tags that will be attached to effects that are expected to trigger some UI message
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(UIMessage_HealthPotion);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(UIMessage_ManaPotion);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(UIMessage_HealthCrystal);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(UIMessage_ManaCrystal);
+

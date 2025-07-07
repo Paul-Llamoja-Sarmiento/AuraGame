@@ -15,7 +15,8 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attributes_Primary_Vitality, "Attributes.Primary.
 
 
 // Game Effects Tags
-UE_DEFINE_GAMEPLAY_TAG_COMMENT(Effect_Source_Item_HealthPotion, "Effect.Source.Item.HealthPotion", "Identifies an effect that is applied by a health potion.");
-UE_DEFINE_GAMEPLAY_TAG_COMMENT(Effect_Source_Item_ManaPotion, "Effect.Source.Item.ManaPotion", "Identifies an effect that is applied by a mana potion.");
-UE_DEFINE_GAMEPLAY_TAG_COMMENT(Effect_Source_Item_HealthCrystal, "Effect.Source.Item.HealthCrystal", "Identifies an effect that is applied by a health crystal.");
-UE_DEFINE_GAMEPLAY_TAG_COMMENT(Effect_Source_Item_ManaCrystal, "Effect.Source.Item.ManaCrystal", "Identifies an effect that is applied by a mana crystal.");
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(UI_Message_HealthPotion, "UIMessage.HealthPotion", "Tag for health potion UI message.");
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(UI_Message_ManaPotion, "UIMessage.ManaPotion", "Tag for mana potion UI message.");
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(UI_Message_HealthCrystal, "UIMessage.HealthCrystal", "Tag for health crystal UI message.");
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(UI_Message_ManaCrystal, "UIMessage.ManaCrystal", "Tag for mana crystal UI message.");
+
