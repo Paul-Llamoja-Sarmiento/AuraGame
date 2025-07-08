@@ -91,6 +91,11 @@ void UGameplayEffectApplierComponent::BeginPlay()
 
 void UGameplayEffectApplierComponent::ApplyEffectToTarget(UAbilitySystemComponent* TargetASC, const FEffectApplicationConfig& EffectConfig)
 {
+	if (!IsValid(TargetASC))
+	{
+		return;
+	}
+	
 	check(EffectConfig.GameplayEffect);
 
 	FGameplayEffectContextHandle EffectContextHandle = TargetASC->MakeEffectContext();
@@ -111,8 +116,9 @@ void UGameplayEffectApplierComponent::ApplyEffectToTarget(UAbilitySystemComponen
 
 void UGameplayEffectApplierComponent::RemoveEffectsFromTarget(UAbilitySystemComponent* TargetASC)
 {
-	if (!ActiveEffectsMap.Contains(TargetASC))
+	if (!ActiveEffectsMap.Contains(TargetASC) || !IsValid(TargetASC))
 	{
+		ActiveEffectsMap.Remove(TargetASC);
 		return;
 	}
 

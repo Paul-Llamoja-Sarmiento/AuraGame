@@ -57,6 +57,8 @@ void APlayerCharacter::InitializeAbilityActorInfo()
 	// Initialize the HUD overlay now that ASC, AttributeSet, and PlayerState are fully initialized.
 	// We do this here to avoid re-fetching these references elsewhere.
 	InitializeHUD();
+
+	InitializeDefaultPrimaryAttributes();
 }
 
 void APlayerCharacter::InitializeHUD() const
