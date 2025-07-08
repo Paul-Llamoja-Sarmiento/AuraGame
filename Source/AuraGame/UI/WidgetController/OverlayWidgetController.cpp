@@ -19,9 +19,9 @@ void UOverlayWidgetController::BroadcastInitialValues()
 {
 	const UAuraAttributeSet* AuraAttributeSet = CastChecked<UAuraAttributeSet>(AttributeSet);
 	IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget, Attributes_Vital_Health, AuraAttributeSet->GetHealth());
-	IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget, Attributes_Vital_MaxHealth, AuraAttributeSet->GetMaxHealth());
+	IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget, Attributes_Secondary_MaxHealth, AuraAttributeSet->GetMaxHealth());
 	IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget, Attributes_Vital_Mana, AuraAttributeSet->GetMana());
-	IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget, Attributes_Vital_MaxMana, AuraAttributeSet->GetMaxMana());
+	IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget, Attributes_Secondary_MaxMana, AuraAttributeSet->GetMaxMana());
 }
 
 void UOverlayWidgetController::BindCallbacksToDependencies()
@@ -44,7 +44,7 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 		{
 			if (IsValid(ControlledWidget))
 			{
-				IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget,Attributes_Vital_MaxHealth, Data.NewValue);
+				IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget,Attributes_Secondary_MaxHealth, Data.NewValue);
 			}
 		}
 		);
@@ -64,7 +64,7 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 		{
 			if (IsValid(ControlledWidget))
 			{
-				IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget,Attributes_Vital_MaxMana, Data.NewValue);
+				IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget,Attributes_Secondary_MaxMana, Data.NewValue);
 			}
 		}
 	);
