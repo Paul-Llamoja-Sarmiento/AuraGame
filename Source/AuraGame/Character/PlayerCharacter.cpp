@@ -58,7 +58,7 @@ void APlayerCharacter::InitializeAbilityActorInfo()
 	// We do this here to avoid re-fetching these references elsewhere.
 	InitializeHUD();
 
-	InitializeDefaultPrimaryAttributes();
+	InitializeDefaultAttributes();
 }
 
 void APlayerCharacter::InitializeHUD() const

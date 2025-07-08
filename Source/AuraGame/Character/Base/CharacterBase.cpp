@@ -20,20 +20,20 @@ void ACharacterBase::BeginPlay()
 	
 }
 
-void ACharacterBase::InitializeDefaultPrimaryAttributes()
+void ACharacterBase::InitializeDefaultAttributes() const
 {
-	if (!IsValid(AbilitySystemComponent))
-	{
-		return;
-	}
-	
+	ApplyEffectToSelf(DefaultPrimaryAttributesEffect);
+	ApplyEffectToSelf(DefaultSecondaryAttributesEffect);
+}
+
+void ACharacterBase::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& EffectClass, float InLevel) const
+{
+	check(AbilitySystemComponent);
 	check(DefaultPrimaryAttributesEffect);
 
-	FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
-	EffectContextHandle.AddSourceObject(this);
+	const FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
 	const FGameplayEffectSpecHandle EffectSpecHandle = AbilitySystemComponent->MakeOutgoingSpec(
-		DefaultPrimaryAttributesEffect, 1.0f, EffectContextHandle);
+		EffectClass, InLevel, EffectContextHandle);
 
-	FActiveGameplayEffectHandle ActiveEffectHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(
-		*EffectSpecHandle.Data);
+	AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data);
 }
