@@ -1,5 +1,4 @@
-﻿// 
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
@@ -23,7 +22,7 @@ class AURAGAME_API IEffectMessageWidgetInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void IInitializeMessageWidget(const FText& NewText, UTexture2D* NewTexture);
+	void IInitializeMessageWidget(const FText& NewMessage, UTexture2D* NewIcon);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void IStartMessageAnimation();
