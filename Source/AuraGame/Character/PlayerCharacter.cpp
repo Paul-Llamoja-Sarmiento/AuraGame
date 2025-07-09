@@ -39,6 +39,17 @@ void APlayerCharacter::OnRep_PlayerState()
 	InitializeAbilityActorInfo();
 }
 
+int32 APlayerCharacter::IGetCharacterLevel_Implementation() const
+{
+	APlayerState* CurrentPlayerState = GetPlayerState();
+	if (IsValid(CurrentPlayerState) && CurrentPlayerState->GetClass()->ImplementsInterface(UCombatInterface::StaticClass()))
+	{
+		return ICombatInterface::Execute_IGetCharacterLevel(CurrentPlayerState);
+	}
+
+	return 1; // Default level if PlayerState is invalid or doesn't implement ICombatInterface
+}
+
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();

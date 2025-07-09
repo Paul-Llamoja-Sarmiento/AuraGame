@@ -2,11 +2,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AuraGame/Interaction/CombatInterface.h"
 #include "Base/CharacterBase.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS(Abstract)
-class AURAGAME_API APlayerCharacter : public ACharacterBase
+class AURAGAME_API APlayerCharacter : public ACharacterBase, public ICombatInterface
 {
 	GENERATED_BODY()
 
@@ -16,6 +17,9 @@ public:
 	virtual void PossessedBy(AController* NewController) override;
 
 	virtual void OnRep_PlayerState() override;
+
+	// ICombatInterface
+	virtual int32 IGetCharacterLevel_Implementation() const override;
 
 protected:
 	virtual void BeginPlay() override;	
