@@ -31,7 +31,8 @@ void ACharacterBase::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& Effec
 	check(AbilitySystemComponent);
 	check(DefaultPrimaryAttributesEffect);
 
-	const FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
+	FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
+	EffectContextHandle.AddSourceObject(this);
 	const FGameplayEffectSpecHandle EffectSpecHandle = AbilitySystemComponent->MakeOutgoingSpec(
 		EffectClass, InLevel, EffectContextHandle);
 
