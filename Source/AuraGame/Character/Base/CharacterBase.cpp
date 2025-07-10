@@ -24,6 +24,7 @@ void ACharacterBase::InitializeDefaultAttributes() const
 {
 	ApplyEffectToSelf(DefaultPrimaryAttributesEffect);
 	ApplyEffectToSelf(DefaultSecondaryAttributesEffect);
+	ApplyEffectToSelf(DefaultVitalAttributesEffect);
 }
 
 void ACharacterBase::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& EffectClass, float InLevel) const
