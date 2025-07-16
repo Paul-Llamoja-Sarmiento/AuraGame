@@ -30,7 +30,7 @@ struct FWidgetControllerParams
 	} 
 
 	UPROPERTY(BlueprintReadWrite)
-	TObjectPtr<UObject> Widget;
+	TObjectPtr<UObject> Widget = nullptr;
 	
 	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<APlayerController> PlayerController = nullptr;

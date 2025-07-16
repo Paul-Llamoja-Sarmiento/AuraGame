@@ -29,5 +29,8 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void IDisplayUIMessage(const FText& Message, TSubclassOf<UUserWidgetBase> WidgetClass, UTexture2D* MessageIcon);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void IToggleAttributeMenuButton(bool bShow);
 	
 };

@@ -13,7 +13,7 @@ struct FGameplayEffectSpec;
 /**
  * 
  */
-UCLASS()
+UCLASS(Abstract)
 class AURAGAME_API UOverlayWidgetController : public UWidgetControllerBase
 {
 	GENERATED_BODY()
@@ -21,6 +21,8 @@ class AURAGAME_API UOverlayWidgetController : public UWidgetControllerBase
 public:
 	// UAuraWidgetController
 	virtual void InitializeAuraWidgetController(const FWidgetControllerParams& InParams) override;
+
+	void SetAttributeButtonEnabled(bool bEnabled) const;
 
 protected:
 	// UAuraWidgetController

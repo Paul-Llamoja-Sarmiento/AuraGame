@@ -15,6 +15,14 @@ void UOverlayWidgetController::InitializeAuraWidgetController(const FWidgetContr
 	Super::InitializeAuraWidgetController(InParams);
 }
 
+void UOverlayWidgetController::SetAttributeButtonEnabled(bool bEnabled) const
+{
+	if (IsValid(ControlledWidget))
+	{
+		IOverlayWidgetInterface::Execute_IToggleAttributeMenuButton(ControlledWidget, bEnabled);
+	}
+}
+
 void UOverlayWidgetController::BroadcastInitialValues()
 {
 	const UAuraAttributeSet* AuraAttributeSet = CastChecked<UAuraAttributeSet>(AttributeSet);
