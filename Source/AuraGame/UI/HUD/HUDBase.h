@@ -10,23 +10,10 @@
 #include "HUDBase.generated.h"
 
 
-class UAttributeSet;
 class UAbilitySystemComponent;
 class UOverlayWidgetController;
+class UAuraAttributeSet;
 
-
-struct FUIInitParams
-{
-	APlayerController* PC;
-	APlayerState* PS;
-	UAbilitySystemComponent* ASC;
-	UAttributeSet* AS;
-
-	FUIInitParams() : PC(nullptr), PS(nullptr), ASC(nullptr), AS(nullptr) {}
-	FUIInitParams(APlayerController* InPC, APlayerState* InPS,
-				  UAbilitySystemComponent* InASC, UAttributeSet* InAS)
-		: PC(InPC), PS(InPS), ASC(InASC), AS(InAS) {}
-};
 
 
 /**
@@ -38,7 +25,7 @@ class AURAGAME_API AHUDBase : public AHUD, public IHUDInterface
 	GENERATED_BODY()
 
 public:
-	virtual void IInitOverlay_Implementation(APlayerController* InPC, APlayerState* InPS, UAbilitySystemComponent* InASC, UAttributeSet* InAS) override;
+	virtual void IInitOverlay_Implementation(APlayerController* InPC, APlayerState* InPS, UAbilitySystemComponent* InASC, UAuraAttributeSet* InAS) override;
 
 	// Show/hide dynamic menus
 	UFUNCTION(BlueprintCallable, Category = "UI Menu")

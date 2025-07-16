@@ -27,8 +27,8 @@ public:
 
 protected:
 	// UAuraWidgetController
-	virtual void BindCallbacksToDependencies() override;
 	virtual void BroadcastInitialValues() override;
+	virtual void BindCallbacksToDependencies() override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI Messages")
 	TMap<FGameplayTag, UUIMessageData*> UIMessagesMap;

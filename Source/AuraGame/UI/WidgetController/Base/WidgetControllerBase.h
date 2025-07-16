@@ -6,7 +6,7 @@
 #include "WidgetControllerBase.generated.h"
 
 
-class UAttributeSet;
+class UAuraAttributeSet;
 class UAbilitySystemComponent;
 
 
@@ -20,7 +20,7 @@ struct FWidgetControllerParams
 	}
 
 	FWidgetControllerParams(UObject* InWidget, APlayerController* InPC, APlayerState* InPS,
-	                        UAbilitySystemComponent* InASC, UAttributeSet* InAS):
+	                        UAbilitySystemComponent* InASC, UAuraAttributeSet* InAS):
 		Widget(InWidget),
 		PlayerController(InPC),
 		PlayerState(InPS),
@@ -42,7 +42,7 @@ struct FWidgetControllerParams
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent = nullptr;
 
 	UPROPERTY(BlueprintReadWrite)
-	TObjectPtr<UAttributeSet> AttributeSet = nullptr;
+	TObjectPtr<UAuraAttributeSet> AttributeSet = nullptr;
 };
 
 
@@ -71,12 +71,11 @@ protected:
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
-	TObjectPtr<UAttributeSet> AttributeSet;
+	TObjectPtr<UAuraAttributeSet> AttributeSet;
 
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
 	TObjectPtr<UObject> ControlledWidget;
 
-	virtual void BindCallbacksToDependencies() {}
-	
 	virtual void BroadcastInitialValues() {}
+	virtual void BindCallbacksToDependencies() {}
 };

@@ -2,13 +2,12 @@
 #include "HUDBase.h"
 
 
-#include "HeadMountedDisplayTypes.h"
 #include "AuraGame/UI/Widget/Base/UserWidgetBase.h"
 #include "AuraGame/UI/WidgetController/OverlayWidgetController.h"
 
 
 void AHUDBase::IInitOverlay_Implementation(APlayerController* InPC, APlayerState* InPS,
-	UAbilitySystemComponent* InASC, UAttributeSet* InAS)
+	UAbilitySystemComponent* InASC, UAuraAttributeSet* InAS)
 {
 	// Store init params for dynamic menus
 	UIInitParams = FWidgetControllerParams(nullptr, InPC, InPS, InASC, InAS);

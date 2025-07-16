@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AttributeSet.h"
 #include "GameplayTagContainer.h"
 #include "Engine/DataAsset.h"
 #include "AttributeInfo.generated.h"
@@ -17,8 +18,8 @@ struct FAttributeInfoStruct
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Attribute Info")
 	FText AttributeDescription = FText();
 
-	UPROPERTY(BlueprintReadOnly, Category = "Attribute Info")
-	float AttributeValue = -1.f;
+	UPROPERTY(EditDefaultsOnly, Category = "Attribute Info")
+	FGameplayAttribute AttributeGetter;
 };
 
 /**

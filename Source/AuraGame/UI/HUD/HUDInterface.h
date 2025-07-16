@@ -6,7 +6,7 @@
 #include "HUDInterface.generated.h"
 
 
-class UAttributeSet;
+class UAuraAttributeSet;
 class UAbilitySystemComponent;
 
 
@@ -28,5 +28,5 @@ class AURAGAME_API IHUDInterface
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void IInitOverlay(APlayerController* InPC, APlayerState* InPS, UAbilitySystemComponent* InASC,
-	                 UAttributeSet* InAS);
+	                 UAuraAttributeSet* InAS);
 };

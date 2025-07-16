@@ -7,8 +7,8 @@
 #include "CharacterBase.generated.h"
 
 
+class UAuraAttributeSet;
 class UGameplayEffect;
-class UAttributeSet;
 class UAbilitySystemComponent;
 
 
@@ -23,7 +23,7 @@ public:
 	// IAbilitySystemInterface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
 
-	UAttributeSet* GetAttributeSet() { return AttributeSet; }
+	UAuraAttributeSet* GetAttributeSet() { return AttributeSet; }
 
 protected:
 	virtual void BeginPlay() override;
@@ -38,7 +38,7 @@ protected:
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
 	UPROPERTY()
-	TObjectPtr<UAttributeSet> AttributeSet;
+	TObjectPtr<UAuraAttributeSet> AttributeSet;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Attributes")
 	TSubclassOf<UGameplayEffect> DefaultPrimaryAttributesEffect;

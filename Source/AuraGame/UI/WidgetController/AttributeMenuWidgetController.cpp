@@ -2,6 +2,7 @@
 #include "AttributeMenuWidgetController.h"
 
 #include "AuraGame/GameplayAbilitySystem/AuraAttributeSet.h"
+#include "AuraGame/GameplayAbilitySystem/Data/AttributeInfo.h"
 
 
 void UAttributeMenuWidgetController::InitializeAuraWidgetController(const FWidgetControllerParams& InParams)
@@ -16,21 +17,65 @@ void UAttributeMenuWidgetController::InitializeAuraWidgetController(const FWidge
 		ControlledWidget, OnCloseButtonPressedInternal);
 }
 
-void UAttributeMenuWidgetController::BindCallbacksToDependencies()
+void UAttributeMenuWidgetController::CleanupController()
 {
-	const UAuraAttributeSet* AuraAttributeSet = CastChecked<UAuraAttributeSet>(AttributeSet);
+	if (IsValid(ControlledWidget))
+	{
+		IAttributeMenuWidgetInterface::Execute_IUnbindFromOnAttributeMenuCloseButtonPressed(
+			ControlledWidget, OnCloseButtonPressedInternal);
+	}
+
+	if (IsValid(AbilitySystemComponent))
+	{
+		for (auto& Delegate : AttributeChangeDelegates)
+		{
+			if (!Delegate.Key.IsValid()) continue;
+			
+			AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+				Delegate.Value).Remove(Delegate.Key);
+			Delegate.Key.Reset();
+		}
+
+		AttributeChangeDelegates.Empty();
+	}
 }
 
-void UAttributeMenuWidgetController::BroadcastInitialValues()
+void UAttributeMenuWidgetController::BroadcastInitialValues() 
 {
-	const UAuraAttributeSet* AuraAttributeSet = CastChecked<UAuraAttributeSet>(AttributeSet);
+	check(AttributeInfoData);
+	if (!IsValid(ControlledWidget) || !IsValid(AttributeSet))
+	{
+		return;
+	}
 	
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetHealthAttribute()).AddLambda(
-		[this](const FOnAttributeChangeData& Data)
-		{
-				
-		}
-		);
+	for (const auto& AttributeData: AttributeInfoData->AttributeInfoMap)
+	{
+		const float InitialValue = AttributeData.Value.AttributeGetter.GetNumericValue(AttributeSet);
+		IAttributeMenuWidgetInterface::Execute_IUpdateAttributeValue(ControlledWidget, AttributeData.Key, AttributeData.Value, InitialValue);
+	}
+}
+
+void UAttributeMenuWidgetController::BindCallbacksToDependencies()
+{
+	check(AttributeInfoData);
+	if (!IsValid(ControlledWidget) || !IsValid(AbilitySystemComponent) || !IsValid(AttributeSet))
+	{
+		return;
+	}
+
+	for (const auto& AttributeData : AttributeInfoData->AttributeInfoMap)
+	{
+		FDelegateHandle Delegate = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+			AttributeData.Value.AttributeGetter).AddLambda(
+			[this, AttributeData](const FOnAttributeChangeData& Data)
+			{
+				const float InitialValue = AttributeData.Value.AttributeGetter.GetNumericValue(AttributeSet);
+				IAttributeMenuWidgetInterface::Execute_IUpdateAttributeValue(
+					ControlledWidget, AttributeData.Key, AttributeData.Value, InitialValue);
+			});
+
+		AttributeChangeDelegates.Add(Delegate, AttributeData.Value.AttributeGetter);
+	}
 }
 
 void UAttributeMenuWidgetController::OnMenuCloseHandle()

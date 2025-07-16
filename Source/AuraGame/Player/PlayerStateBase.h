@@ -8,7 +8,7 @@
 #include "PlayerStateBase.generated.h"
 
 
-class UAttributeSet;
+class UAuraAttributeSet;
 class UAbilitySystemComponent;
 
 
@@ -29,14 +29,14 @@ public:
 	// ICombatInterface
 	virtual int32 IGetCharacterLevel_Implementation() const override { return Level; }
 
-	UAttributeSet* GetAttributeSet() { return AttributeSet; }
+	UAuraAttributeSet* GetAttributeSet() { return AttributeSet; }
 
 protected:
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
 	UPROPERTY()
-	TObjectPtr<UAttributeSet> AttributeSet;
+	TObjectPtr<UAuraAttributeSet> AttributeSet;
 
 	UPROPERTY(VisibleAnywhere)
 	int32 Level = 1;
