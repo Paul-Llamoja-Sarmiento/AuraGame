@@ -21,6 +21,7 @@ class AURAGAME_API UOverlayWidgetController : public UWidgetControllerBase
 public:
 	// UAuraWidgetController
 	virtual void InitializeAuraWidgetController(const FWidgetControllerParams& InParams) override;
+	virtual void CleanupController() override;
 
 	void SetAttributeButtonEnabled(bool bEnabled) const;
 
@@ -33,7 +34,13 @@ protected:
 	TMap<FGameplayTag, UUIMessageData*> UIMessagesMap;
 	
 private:
+	FDelegateHandle HealthAttributeBinding;
+	FDelegateHandle MaxHealthAttributeBinding;
+	FDelegateHandle ManaAttributeBinding;
+	FDelegateHandle MaxManaAttributeBinding;
+	FDelegateHandle GameplayEffectBinding;
+
 	void OnGameplayEffectAppliedToSelfHandle(UAbilitySystemComponent* ASC,
-	                                         const FGameplayEffectSpec& EffectSpec,
-	                                         FActiveGameplayEffectHandle ActiveEffectHandle);
+											 const FGameplayEffectSpec& EffectSpec,
+											 FActiveGameplayEffectHandle ActiveEffectHandle);
 };

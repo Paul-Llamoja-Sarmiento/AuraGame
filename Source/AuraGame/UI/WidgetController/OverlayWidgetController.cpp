@@ -15,6 +15,48 @@ void UOverlayWidgetController::InitializeAuraWidgetController(const FWidgetContr
 	Super::InitializeAuraWidgetController(InParams);
 }
 
+void UOverlayWidgetController::CleanupController()
+{
+	if (!IsValid(AbilitySystemComponent))
+	{
+		return;
+	}
+
+	if (HealthAttributeBinding.IsValid())
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+			UAuraAttributeSet::GetHealthAttribute()).Remove(HealthAttributeBinding);
+		HealthAttributeBinding.Reset();
+	}
+
+	if (MaxHealthAttributeBinding.IsValid())
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+			UAuraAttributeSet::GetMaxHealthAttribute()).Remove(MaxHealthAttributeBinding);
+		MaxHealthAttributeBinding.Reset();
+	}
+
+	if (ManaAttributeBinding.IsValid())
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+			UAuraAttributeSet::GetManaAttribute()).Remove(ManaAttributeBinding);
+		ManaAttributeBinding.Reset();
+	}
+
+	if (MaxManaAttributeBinding.IsValid())
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+			UAuraAttributeSet::GetMaxManaAttribute()).Remove(MaxManaAttributeBinding);
+		MaxManaAttributeBinding.Reset();
+	}
+
+	if (GameplayEffectBinding.IsValid())
+	{
+		AbilitySystemComponent->OnGameplayEffectAppliedDelegateToSelf.Remove(GameplayEffectBinding);
+		GameplayEffectBinding.Reset();
+	}
+}
+
 void UOverlayWidgetController::SetAttributeButtonEnabled(bool bEnabled) const
 {
 	if (IsValid(ControlledWidget))
@@ -35,49 +77,56 @@ void UOverlayWidgetController::BroadcastInitialValues()
 void UOverlayWidgetController::BindCallbacksToDependencies()
 {
 	const UAuraAttributeSet* AuraAttributeSet = CastChecked<UAuraAttributeSet>(AttributeSet);
-	
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetHealthAttribute()).AddLambda(
+
+	HealthAttributeBinding = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+		AuraAttributeSet->GetHealthAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
 		{
 			if (IsValid(ControlledWidget))
 			{
-				IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget,Attributes_Vital_Health, Data.NewValue);
-			}
-				
-		}
-		);
-	
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxHealthAttribute()).AddLambda(
-		[this](const FOnAttributeChangeData& Data)
-		{
-			if (IsValid(ControlledWidget))
-			{
-				IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget,Attributes_Secondary_MaxHealth, Data.NewValue);
-			}
-		}
-		);
-	
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetManaAttribute()).AddLambda(
-		[this](const FOnAttributeChangeData& Data)
-		{
-			if (IsValid(ControlledWidget))
-			{
-				IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget,Attributes_Vital_Mana, Data.NewValue);
-			}
-		}
-		);
-	
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxManaAttribute()).AddLambda(
-		[this](const FOnAttributeChangeData& Data)
-		{
-			if (IsValid(ControlledWidget))
-			{
-				IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget,Attributes_Secondary_MaxMana, Data.NewValue);
+				IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget, Attributes_Vital_Health,
+				                                                       Data.NewValue);
 			}
 		}
 	);
 
-	AbilitySystemComponent->OnGameplayEffectAppliedDelegateToSelf.AddUObject(
+	MaxHealthAttributeBinding = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+		AuraAttributeSet->GetMaxHealthAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			if (IsValid(ControlledWidget))
+			{
+				IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget, Attributes_Secondary_MaxHealth,
+				                                                       Data.NewValue);
+			}
+		}
+	);
+
+	ManaAttributeBinding = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+		AuraAttributeSet->GetManaAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			if (IsValid(ControlledWidget))
+			{
+				IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget, Attributes_Vital_Mana,
+				                                                       Data.NewValue);
+			}
+		}
+	);
+
+	MaxManaAttributeBinding = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+		AuraAttributeSet->GetMaxManaAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			if (IsValid(ControlledWidget))
+			{
+				IOverlayWidgetInterface::Execute_IUpdateVitalAttribute(ControlledWidget, Attributes_Secondary_MaxMana,
+				                                                       Data.NewValue);
+			}
+		}
+	);
+
+	GameplayEffectBinding = AbilitySystemComponent->OnGameplayEffectAppliedDelegateToSelf.AddUObject(
 		this, &UOverlayWidgetController::OnGameplayEffectAppliedToSelfHandle);
 }
 

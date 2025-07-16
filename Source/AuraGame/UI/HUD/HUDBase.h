@@ -92,6 +92,11 @@ protected:
 
 	void HideDynamicWidget(const FName& WidgetName)
 	{
+		if (UWidgetControllerBase** FoundController = DynamicControllers.Find(WidgetName))
+		{
+			(*FoundController)->CleanupController();
+		}
+		
 		if (UUserWidgetBase** FoundWidget = DynamicWidgets.Find(WidgetName))
 		{
 			if (UUserWidgetBase* Widget = *FoundWidget)

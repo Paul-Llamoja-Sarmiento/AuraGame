@@ -58,6 +58,8 @@ public:
 	UFUNCTION()
 	virtual void InitializeAuraWidgetController(const FWidgetControllerParams& InParams);
 
+	virtual void CleanupController() {}
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
 	TObjectPtr<APlayerController> PlayerController;
