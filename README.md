@@ -23,7 +23,9 @@ It’s based primarily on the following resources:
 
 ## 🎮 Demo Preview
 
-👉[Demo Preview](https://youtu.be/FWDv4NXYaKQ)
+👉[Pickup items + Basic HUD](https://youtu.be/FWDv4NXYaKQ)
+
+👉[Attribute Menu](https://youtu.be/z14QqKJltBo)
 
 ## 🚀 Getting Started
 
