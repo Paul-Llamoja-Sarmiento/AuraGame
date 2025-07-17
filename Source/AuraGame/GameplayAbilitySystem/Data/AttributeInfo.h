@@ -11,6 +11,9 @@ USTRUCT(BlueprintType)
 struct FAttributeInfoStruct
 {
 	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute Info")
+	FGameplayTag AttributeTag = FGameplayTag();
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Attribute Info")
 	FText AttributeName = FText();
@@ -19,7 +22,7 @@ struct FAttributeInfoStruct
 	FText AttributeDescription = FText();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Attribute Info")
-	FGameplayAttribute AttributeGetter;
+	FGameplayAttribute AttributeGetter = FGameplayAttribute();
 };
 
 /**
@@ -33,6 +36,11 @@ class AURAGAME_API UAttributeInfo : public UDataAsset
 public:
 	bool FindAttributeInfoByTag(const FGameplayTag& AttributeTag, FAttributeInfoStruct& InAttributeInfo) const;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Attribute Info")
-	TMap<FGameplayTag, FAttributeInfoStruct> AttributeInfoMap;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Attribute Info", meta=(TitleProperty = "AttributeName"))
+	TArray<FAttributeInfoStruct> AttributeInfoArray;
+
+#if WITH_EDITOR
+	UFUNCTION(Category = "Populate Attribute Info", CallInEditor)
+	void PopulateAttributeInfo();
+#endif
 };

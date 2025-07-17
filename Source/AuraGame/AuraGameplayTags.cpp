@@ -31,3 +31,27 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(UI_Message_ManaPotion, "UIMessage.ManaPotion", "T
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(UI_Message_HealthCrystal, "UIMessage.HealthCrystal", "Tag for health crystal UI message.");
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(UI_Message_ManaCrystal, "UIMessage.ManaCrystal", "Tag for mana crystal UI message.");
 
+
+FAttributeGameplayTags FAttributeGameplayTags::AttributeGameplayTags;
+
+void FAttributeGameplayTags::InitializeNativeGasGameplayTags()
+{
+	AttributeGameplayTags.AttributeTagsContainer.AddTag(Attributes_Primary_Strength);
+	AttributeGameplayTags.AttributeTagsContainer.AddTag(Attributes_Primary_Intelligence);
+	AttributeGameplayTags.AttributeTagsContainer.AddTag(Attributes_Primary_Resilience);
+	AttributeGameplayTags.AttributeTagsContainer.AddTag(Attributes_Primary_Vigor);
+
+	AttributeGameplayTags.AttributeTagsContainer.AddTag(Attributes_Secondary_Armor);
+	AttributeGameplayTags.AttributeTagsContainer.AddTag(Attributes_Secondary_ArmorPenetration);
+	AttributeGameplayTags.AttributeTagsContainer.AddTag(Attributes_Secondary_BlockChance);
+	AttributeGameplayTags.AttributeTagsContainer.AddTag(Attributes_Secondary_CriticalHitChance);
+	AttributeGameplayTags.AttributeTagsContainer.AddTag(Attributes_Secondary_CriticalHitDamage);
+	AttributeGameplayTags.AttributeTagsContainer.AddTag(Attributes_Secondary_CriticalHitResistance);
+	AttributeGameplayTags.AttributeTagsContainer.AddTag(Attributes_Secondary_HealthRegeneration);
+	AttributeGameplayTags.AttributeTagsContainer.AddTag(Attributes_Secondary_ManaRegeneration);
+	AttributeGameplayTags.AttributeTagsContainer.AddTag(Attributes_Secondary_MaxHealth);
+	AttributeGameplayTags.AttributeTagsContainer.AddTag(Attributes_Secondary_MaxMana);
+
+	AttributeGameplayTags.AttributeTagsContainer.AddTag(Attributes_Vital_Health);
+	AttributeGameplayTags.AttributeTagsContainer.AddTag(Attributes_Vital_Mana);
+}

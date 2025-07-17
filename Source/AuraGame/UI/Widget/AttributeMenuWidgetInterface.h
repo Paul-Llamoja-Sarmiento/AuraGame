@@ -6,7 +6,6 @@
 #include "AttributeMenuWidgetInterface.generated.h"
 
 
-struct FGameplayTag;
 struct FAttributeInfoStruct;
 
 
@@ -36,5 +35,5 @@ public:
 	void IUnbindFromOnAttributeMenuCloseButtonPressed(const FCloseButtonPressed& Event);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void IUpdateAttributeValue(const FGameplayTag& GameplayTag, const FAttributeInfoStruct& AttributeInfo, float NewValue);
+	void IUpdateAttributeValue(const FAttributeInfoStruct& AttributeInfo, float NewValue);
 };

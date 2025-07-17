@@ -35,3 +35,15 @@ UE_DECLARE_GAMEPLAY_TAG_EXTERN(UIMessage_ManaPotion);
 UE_DECLARE_GAMEPLAY_TAG_EXTERN(UIMessage_HealthCrystal);
 UE_DECLARE_GAMEPLAY_TAG_EXTERN(UIMessage_ManaCrystal);
 
+struct FAttributeGameplayTags
+{
+public:
+	static const FAttributeGameplayTags& Get() { return AttributeGameplayTags; }
+	static void InitializeNativeGasGameplayTags();
+
+	FGameplayTagContainer AttributeTagsContainer = FGameplayTagContainer();
+
+private:
+	static FAttributeGameplayTags AttributeGameplayTags;
+};
+

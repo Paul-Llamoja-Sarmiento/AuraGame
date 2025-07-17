@@ -48,10 +48,10 @@ void UAttributeMenuWidgetController::BroadcastInitialValues()
 		return;
 	}
 	
-	for (const auto& AttributeData: AttributeInfoData->AttributeInfoMap)
+	for (const auto& AttributeData: AttributeInfoData->AttributeInfoArray)
 	{
-		const float InitialValue = AttributeData.Value.AttributeGetter.GetNumericValue(AttributeSet);
-		IAttributeMenuWidgetInterface::Execute_IUpdateAttributeValue(ControlledWidget, AttributeData.Key, AttributeData.Value, InitialValue);
+		const float InitialValue = AttributeData.AttributeGetter.GetNumericValue(AttributeSet);
+		IAttributeMenuWidgetInterface::Execute_IUpdateAttributeValue(ControlledWidget, AttributeData, InitialValue);
 	}
 }
 
@@ -63,18 +63,18 @@ void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 		return;
 	}
 
-	for (const auto& AttributeData : AttributeInfoData->AttributeInfoMap)
+	for (const auto& AttributeData : AttributeInfoData->AttributeInfoArray)
 	{
 		FDelegateHandle Delegate = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-			AttributeData.Value.AttributeGetter).AddLambda(
+			AttributeData.AttributeGetter).AddLambda(
 			[this, AttributeData](const FOnAttributeChangeData& Data)
 			{
-				const float InitialValue = AttributeData.Value.AttributeGetter.GetNumericValue(AttributeSet);
+				const float NewValue = AttributeData.AttributeGetter.GetNumericValue(AttributeSet);
 				IAttributeMenuWidgetInterface::Execute_IUpdateAttributeValue(
-					ControlledWidget, AttributeData.Key, AttributeData.Value, InitialValue);
+					ControlledWidget, AttributeData, NewValue);
 			});
 
-		AttributeChangeDelegates.Add(Delegate, AttributeData.Value.AttributeGetter);
+		AttributeChangeDelegates.Add(Delegate, AttributeData.AttributeGetter);
 	}
 }
 

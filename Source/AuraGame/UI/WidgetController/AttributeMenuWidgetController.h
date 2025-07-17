@@ -2,12 +2,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AttributeSet.h"
 #include "AuraGame/UI/Widget/AttributeMenuWidgetInterface.h"
 #include "Base/WidgetControllerBase.h"
 #include "AttributeMenuWidgetController.generated.h"
 
 
-struct FGameplayAttribute;
 class UAttributeInfo;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCloseButtonPressed, UAttributeMenuWidgetController*, Controller);
 
