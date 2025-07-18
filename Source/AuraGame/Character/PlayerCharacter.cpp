@@ -29,6 +29,7 @@ void APlayerCharacter::PossessedBy(AController* NewController)
 	// Called only on the server when this character is possessed.
 	// Initializes ASC with proper owner/avatar info for server-side logic.
 	InitializeAbilityActorInfo();
+	AddCharacterAbilities();
 }
 
 void APlayerCharacter::OnRep_PlayerState()

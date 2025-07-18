@@ -2,6 +2,7 @@
 #include "CharacterBase.h"
 
 #include "AbilitySystemComponent.h"
+#include "AuraGame/GameplayAbilitySystem/AuraAbilitySystemComponent.h"
 
 
 ACharacterBase::ACharacterBase()
@@ -25,6 +26,22 @@ void ACharacterBase::InitializeDefaultAttributes() const
 	ApplyEffectToSelf(DefaultPrimaryAttributesEffect);
 	ApplyEffectToSelf(DefaultSecondaryAttributesEffect);
 	ApplyEffectToSelf(DefaultVitalAttributesEffect);
+}
+
+void ACharacterBase::AddCharacterAbilities() const
+{
+	if (!HasAuthority())
+	{
+		return;
+	}
+
+	const auto AuraAbilitySystemComponent = CastChecked<UAuraAbilitySystemComponent>(AbilitySystemComponent);
+	if (!IsValid(AuraAbilitySystemComponent))
+	{
+		return;
+	}
+
+	AuraAbilitySystemComponent->GrantCharacterAbilities(StartupAbilities);
 }
 
 void ACharacterBase::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& EffectClass, float InLevel) const

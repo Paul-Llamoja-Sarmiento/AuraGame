@@ -7,6 +7,7 @@
 #include "CharacterBase.generated.h"
 
 
+class UGameplayAbility;
 class UAuraAttributeSet;
 class UGameplayEffect;
 class UAbilitySystemComponent;
@@ -51,6 +52,11 @@ protected:
 
 	void InitializeDefaultAttributes() const;
 
+	void AddCharacterAbilities() const;
+
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
+	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
+	
 	void ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& EffectClass, float InLevel = 1.0f) const;
 };
