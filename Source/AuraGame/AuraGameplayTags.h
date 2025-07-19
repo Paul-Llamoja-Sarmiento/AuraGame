@@ -4,7 +4,6 @@
 #include "NativeGameplayTags.h"
 
 
-
 // Vital Attributes
 UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attributes_Vital_Health);
 UE_DECLARE_GAMEPLAY_TAG_EXTERN(Attributes_Vital_Mana);
@@ -35,9 +34,16 @@ UE_DECLARE_GAMEPLAY_TAG_EXTERN(UIMessage_ManaPotion);
 UE_DECLARE_GAMEPLAY_TAG_EXTERN(UIMessage_HealthCrystal);
 UE_DECLARE_GAMEPLAY_TAG_EXTERN(UIMessage_ManaCrystal);
 
+// Input Tags
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_LMB);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_RMB);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_Key_1);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_Key_2);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_Key_3);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_Key_4);
+
 struct FAttributeGameplayTags
 {
-public:
 	static const FAttributeGameplayTags& Get() { return AttributeGameplayTags; }
 	static void InitializeNativeGasGameplayTags();
 

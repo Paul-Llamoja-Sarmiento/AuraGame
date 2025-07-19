@@ -31,6 +31,14 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(UI_Message_ManaPotion, "UIMessage.ManaPotion", "T
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(UI_Message_HealthCrystal, "UIMessage.HealthCrystal", "Tag for health crystal UI message.");
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(UI_Message_ManaCrystal, "UIMessage.ManaCrystal", "Tag for mana crystal UI message.");
 
+// Input Tags
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(Input_LMB, "Input.LMB", "Input tag for Left Mouse Button");
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(Input_RMB, "Input.RMB", "Input tag for Right Mouse Button");
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(Input_Key_1, "Input.Key.1", "Input tag for Key 1");
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(Input_Key_2, "Input.Key.2", "Input tag for Key 2");
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(Input_Key_3, "Input.Key.3", "Input tag for Key 3");
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(Input_Key_4, "Input.Key.4", "Input tag for Key 4");
+
 
 FAttributeGameplayTags FAttributeGameplayTags::AttributeGameplayTags;
 
