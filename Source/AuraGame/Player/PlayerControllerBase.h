@@ -2,11 +2,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "InputActionValue.h"
 #include "GameFramework/PlayerController.h"
 #include "PlayerControllerBase.generated.h"
 
 
+struct FGameplayTag;
+class UInputConfiguration;
 class IHighlightableActor;
 class UInputAction;
 class UInputMappingContext;
@@ -31,11 +34,14 @@ protected:
 	virtual void SetupInputComponent() override;
 
 private:
-	UPROPERTY(EditAnywhere, Category = "Input")
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputMappingContext> MappingContext;
 
-	UPROPERTY(EditAnywhere, Category = "Input")
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> MoveInputAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputConfiguration> InputConfiguration;
 
 	UPROPERTY()
 	TScriptInterface<IHighlightableActor> LastHighlightedActor;
@@ -46,4 +52,10 @@ private:
 	void Move(const FInputActionValue& InputActionValue);
 
 	void CursorTrace();
+
+	void AbilityInputPressed(FGameplayTag InputTag);
+
+	void AbilityInputHeld(FGameplayTag InputTag);
+
+	void AbilityInputReleased(FGameplayTag InputTag);
 };

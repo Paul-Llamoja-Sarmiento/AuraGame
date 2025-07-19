@@ -1,9 +1,9 @@
 ﻿
 #include "PlayerControllerBase.h"
 
-#include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
+#include "AuraGame/Input/AuraInputComponent.h"
 #include "AuraGame/Interaction/HighlightableActor.h"
 
 
@@ -44,8 +44,12 @@ void APlayerControllerBase::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	auto EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
-	EnhancedInputComponent->BindAction(MoveInputAction, ETriggerEvent::Triggered, this, &APlayerControllerBase::Move);
+	auto AuraInputComponent = CastChecked<UAuraInputComponent>(InputComponent);
+	AuraInputComponent->BindAction(MoveInputAction, ETriggerEvent::Triggered, this, &APlayerControllerBase::Move);
+	AuraInputComponent->BindAbilityActions(InputConfiguration, this,
+	                                       &ThisClass::AbilityInputPressed,
+	                                       &ThisClass::AbilityInputReleased,
+	                                       &ThisClass::AbilityInputHeld);
 }
 
 void APlayerControllerBase::Move(const FInputActionValue& InputActionValue)
@@ -123,4 +127,19 @@ void APlayerControllerBase::CursorTrace()
 			}
 		}
 	}
+}
+
+void APlayerControllerBase::AbilityInputPressed(FGameplayTag InputTag)
+{
+	GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Green, *InputTag.ToString());
+}
+
+void APlayerControllerBase::AbilityInputHeld(FGameplayTag InputTag)
+{
+	GEngine->AddOnScreenDebugMessage(2, 3.f, FColor::Yellow, *InputTag.ToString());
+}
+
+void APlayerControllerBase::AbilityInputReleased(FGameplayTag InputTag)
+{
+	GEngine->AddOnScreenDebugMessage(3, 3.f, FColor::Red, *InputTag.ToString());
 }
