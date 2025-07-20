@@ -8,6 +8,7 @@
 #include "PlayerControllerBase.generated.h"
 
 
+class USplineComponent;
 class UAuraAbilitySystemComponent;
 struct FGameplayTag;
 class UInputConfiguration;
@@ -65,4 +66,17 @@ private:
 	void AbilityInputHeld(const FGameplayTag InputTag);
 
 	void AbilityInputReleased(const FGameplayTag InputTag);
+
+	// Cursor movement
+	FVector CachedDestination = FVector::ZeroVector;
+	float FollowTime = 0.f;
+	float ShortPressThresholdInSeconds = 0.2f;
+	bool bAutoRunning = false;
+	bool bIsTargeting = false;
+
+	UPROPERTY(EditDefaultsOnly)
+	float AutoRunAcceptanceRadius = 50.f;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USplineComponent> SplineComponent;
 };
