@@ -4,6 +4,8 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
+#include "NavigationPath.h"
+#include "NavigationSystem.h"
 #include "AuraGame/AuraGameplayTags.h"
 #include "AuraGame/GameplayAbilitySystem/AuraAbilitySystemComponent.h"
 #include "AuraGame/Input/AuraInputComponent.h"
@@ -162,12 +164,11 @@ void APlayerControllerBase::AbilityInputHeld(const FGameplayTag InputTag)
 {
 	if (!InputTag.MatchesTagExact(Input_LMB) || bIsTargeting)
 	{
-		if (GetAuraASC() == nullptr)
+		if (GetAuraASC() != nullptr)
 		{
-			return;
+			AuraAbilitySystemComponent->AbilityInputHeldHandle(InputTag);;
 		}
-
-		AuraAbilitySystemComponent->AbilityInputHeldHandle(InputTag);
+		
 		return;
 	}
 
@@ -188,10 +189,39 @@ void APlayerControllerBase::AbilityInputHeld(const FGameplayTag InputTag)
 
 void APlayerControllerBase::AbilityInputReleased(const FGameplayTag InputTag)
 {
-	if (GetAuraASC() == nullptr)
+	if (!InputTag.MatchesTagExact(Input_LMB) || bIsTargeting)
+	{
+		if (GetAuraASC() != nullptr)
+		{
+			AuraAbilitySystemComponent->AbilityInputReleasedHandle(InputTag);;
+		}
+		
+		return;
+	}
+
+	FollowTime = 0.f;
+	bIsTargeting = false;
+	// If the player has held the left mouse button for a short time, we will start auto-running.
+	const APawn* ControlledPawn = GetPawn();
+	if (FollowTime > ShortPressThresholdInSeconds || !IsValid(ControlledPawn))
 	{
 		return;
 	}
 
-	AuraAbilitySystemComponent->AbilityInputReleasedHandle(InputTag);
+	if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(
+		this, ControlledPawn->GetActorLocation(), CachedDestination))
+	{
+		SplineComponent->ClearSplinePoints();
+		if (NavPath->PathPoints.Num() == 0)
+		{
+			return;
+		}
+		
+		bAutoRunning = true;
+		for (const FVector& PointLocation : NavPath->PathPoints)
+		{
+			SplineComponent->AddSplinePoint(PointLocation, ESplineCoordinateSpace::World);
+			DrawDebugSphere(GetWorld(), PointLocation, 10.f, 12, FColor::Red, false, 5.f);
+		}
+	}
 }
