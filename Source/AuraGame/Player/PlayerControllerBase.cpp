@@ -26,6 +26,7 @@ void APlayerControllerBase::PlayerTick(float DeltaTime)
 	Super::PlayerTick(DeltaTime);
 
 	CursorTrace();
+	AutoRun();
 }
 
 void APlayerControllerBase::BeginPlay()
@@ -47,6 +48,8 @@ void APlayerControllerBase::BeginPlay()
 	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 	InputMode.SetHideCursorDuringCapture(false);
 	SetInputMode(InputMode);
+
+	NavSystem = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld());
 }
 
 void APlayerControllerBase::SetupInputComponent()
@@ -59,6 +62,26 @@ void APlayerControllerBase::SetupInputComponent()
 	                                       &ThisClass::AbilityInputPressed,
 	                                       &ThisClass::AbilityInputReleased,
 	                                       &ThisClass::AbilityInputHeld);
+}
+
+
+void APlayerControllerBase::AutoRun()
+{
+	APawn* ControlledPawn = GetPawn();
+	if (!bAutoRunning || !IsValid(ControlledPawn))
+	{
+		return;
+	}
+	
+	const FVector LocationOnSpline = SplineComponent->FindLocationClosestToWorldLocation(ControlledPawn->GetActorLocation(), ESplineCoordinateSpace::World);
+	const FVector Direction = SplineComponent->FindDirectionClosestToWorldLocation(LocationOnSpline, ESplineCoordinateSpace::World);
+	ControlledPawn->AddMovementInput(Direction);
+
+	const float DistanceToDestination = (CachedDestination - LocationOnSpline).Length();
+	if (DistanceToDestination <= AutoRunAcceptanceRadius)
+	{
+		bAutoRunning = false;
+	}
 }
 
 
@@ -154,7 +177,7 @@ void APlayerControllerBase::Move(const FInputActionValue& InputActionValue)
 
 void APlayerControllerBase::AbilityInputPressed(const FGameplayTag InputTag)
 {
-	if (InputTag.MatchesTagExact(Input_LMB))
+	if (InputTag.MatchesTagExact(Input_RMB))
 	{
 		bIsTargeting = CurrentHighlightedActor ? true : false;
 		bAutoRunning = false;
@@ -163,7 +186,7 @@ void APlayerControllerBase::AbilityInputPressed(const FGameplayTag InputTag)
 
 void APlayerControllerBase::AbilityInputHeld(const FGameplayTag InputTag)
 {
-	if (!InputTag.MatchesTagExact(Input_LMB) || bIsTargeting)
+	if (!InputTag.MatchesTagExact(Input_RMB) || bIsTargeting)
 	{
 		if (GetAuraASC() != nullptr)
 		{
@@ -190,7 +213,7 @@ void APlayerControllerBase::AbilityInputHeld(const FGameplayTag InputTag)
 
 void APlayerControllerBase::AbilityInputReleased(const FGameplayTag InputTag)
 {
-	if (!InputTag.MatchesTagExact(Input_LMB) || bIsTargeting)
+	if (!InputTag.MatchesTagExact(Input_RMB) || bIsTargeting)
 	{
 		if (GetAuraASC() != nullptr)
 		{
@@ -200,29 +223,45 @@ void APlayerControllerBase::AbilityInputReleased(const FGameplayTag InputTag)
 		return;
 	}
 
-	FollowTime = 0.f;
-	bIsTargeting = false;
 	// If the player has held the left mouse button for a short time, we will start auto-running.
 	const APawn* ControlledPawn = GetPawn();
-	if (FollowTime > ShortPressThresholdInSeconds || !IsValid(ControlledPawn))
+	if (FollowTime <= ShortPressThresholdInSeconds && IsValid(ControlledPawn) && IsValid(NavSystem))
 	{
-		return;
+		FHitResult NavChannelCursorHitResult;
+		GetHitResultUnderCursor(ECC_Navigation, false, NavChannelCursorHitResult);
+		if (NavChannelCursorHitResult.bBlockingHit)
+		{
+			// Projecting a point from the cursor impact point to the NavMesh with a larger-than-default Query Extent,
+			// so there are better chances to reach for the NavMesh and return a point.
+			// Then, generate a path from the pawn location to this point (only if found).
+			// NOTE: Default QueryExtend = FVector(50.0f, 50.0f, 250.0f), but we will be using a larger one to ensure
+			// that we can find a point on the NavMesh even if the cursor is far away from it. This is suitable for
+			// our level design, but it may be adjusted different if needed
+			FNavLocation ImpactPointNavLocation;
+			const FVector QueryingExtent = FVector(400.0f, 400.0f, 250.0f);
+			const FNavAgentProperties& NavAgentProps = GetNavAgentPropertiesRef();
+			const bool bNavLocationFound = NavSystem->ProjectPointToNavigation(NavChannelCursorHitResult.ImpactPoint,
+			                                                                   ImpactPointNavLocation, QueryingExtent,
+			                                                                   &NavAgentProps);
+			if (bNavLocationFound)
+			{
+				UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(
+					GetWorld(), ControlledPawn->GetActorLocation(), ImpactPointNavLocation.Location);
+				if (NavPath && NavPath->PathPoints.Num() > 1 && IsValid(SplineComponent))
+				{
+					SplineComponent->ClearSplinePoints();
+					for (const FVector& PointLocation : NavPath->PathPoints)
+					{
+						SplineComponent->AddSplinePoint(PointLocation, ESplineCoordinateSpace::World);
+					}
+
+					CachedDestination = NavPath->PathPoints.Last();
+					bAutoRunning = true;
+				}
+			}			
+		}		
 	}
 
-	if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(
-		this, ControlledPawn->GetActorLocation(), CachedDestination))
-	{
-		SplineComponent->ClearSplinePoints();
-		if (NavPath->PathPoints.Num() == 0)
-		{
-			return;
-		}
-		
-		bAutoRunning = true;
-		for (const FVector& PointLocation : NavPath->PathPoints)
-		{
-			SplineComponent->AddSplinePoint(PointLocation, ESplineCoordinateSpace::World);
-			DrawDebugSphere(GetWorld(), PointLocation, 10.f, 12, FColor::Red, false, 5.f);
-		}
-	}
+	bIsTargeting = false;
+	FollowTime = 0.f;
 }

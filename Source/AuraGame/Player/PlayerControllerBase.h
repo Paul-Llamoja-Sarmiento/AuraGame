@@ -8,6 +8,7 @@
 #include "PlayerControllerBase.generated.h"
 
 
+class UNavigationSystemV1;
 class USplineComponent;
 class UAuraAbilitySystemComponent;
 struct FGameplayTag;
@@ -79,4 +80,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USplineComponent> SplineComponent;
+
+	UPROPERTY()
+	TObjectPtr<UNavigationSystemV1> NavSystem;
+
+	void AutoRun();
 };
