@@ -15,4 +15,9 @@ public:
 	UAuraAbilitySystemComponent();
 
 	void GrantCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>&  StartupAbilities);
+
+
+	// Input handling functions
+	void AbilityInputHeldHandle(const FGameplayTag& InputTag);
+	void AbilityInputReleasedHandle(const FGameplayTag& InputTag);
 };

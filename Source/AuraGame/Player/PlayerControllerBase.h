@@ -8,6 +8,7 @@
 #include "PlayerControllerBase.generated.h"
 
 
+class UAuraAbilitySystemComponent;
 struct FGameplayTag;
 class UInputConfiguration;
 class IHighlightableActor;
@@ -44,18 +45,24 @@ private:
 	TObjectPtr<UInputConfiguration> InputConfiguration;
 
 	UPROPERTY()
+	TObjectPtr<UAuraAbilitySystemComponent> AuraAbilitySystemComponent;
+
+	UPROPERTY()
 	TScriptInterface<IHighlightableActor> LastHighlightedActor;
 
 	UPROPERTY()
 	TScriptInterface<IHighlightableActor> CurrentHighlightedActor;
 
-	void Move(const FInputActionValue& InputActionValue);
-
 	void CursorTrace();
 
-	void AbilityInputPressed(FGameplayTag InputTag);
+	UAuraAbilitySystemComponent* GetAuraASC();
 
-	void AbilityInputHeld(FGameplayTag InputTag);
+	// Input handling functions
+	void Move(const FInputActionValue& InputActionValue);
 
-	void AbilityInputReleased(FGameplayTag InputTag);
+	void AbilityInputPressed(const FGameplayTag InputTag);
+
+	void AbilityInputHeld(const FGameplayTag InputTag);
+
+	void AbilityInputReleased(const FGameplayTag InputTag);
 };

@@ -1,8 +1,10 @@
 ﻿
 #include "PlayerControllerBase.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
+#include "AuraGame/GameplayAbilitySystem/AuraAbilitySystemComponent.h"
 #include "AuraGame/Input/AuraInputComponent.h"
 #include "AuraGame/Interaction/HighlightableActor.h"
 
@@ -52,22 +54,6 @@ void APlayerControllerBase::SetupInputComponent()
 	                                       &ThisClass::AbilityInputHeld);
 }
 
-void APlayerControllerBase::Move(const FInputActionValue& InputActionValue)
-{
-	APawn* ControlledPawn = GetPawn();
-	if (!IsValid(ControlledPawn))
-	{
-		return;
-	}
-
-	const FVector2D MoveValue = InputActionValue.Get<FVector2D>();
-	const FRotator Rotation = FRotator(0.0f, GetControlRotation().Yaw, 0.0f);
-	const FVector ForwardDirection = FRotationMatrix(Rotation).GetUnitAxis(EAxis::X);
-	const FVector RightDirection = FRotationMatrix(Rotation).GetUnitAxis(EAxis::Y);
-
-	ControlledPawn->AddMovementInput(ForwardDirection, MoveValue.Y);
-	ControlledPawn->AddMovementInput(RightDirection, MoveValue.X);
-}
 
 void APlayerControllerBase::CursorTrace()
 {
@@ -129,17 +115,57 @@ void APlayerControllerBase::CursorTrace()
 	}
 }
 
-void APlayerControllerBase::AbilityInputPressed(FGameplayTag InputTag)
+UAuraAbilitySystemComponent* APlayerControllerBase::GetAuraASC()
 {
-	GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Green, *InputTag.ToString());
+	if (AuraAbilitySystemComponent == nullptr)
+	{
+		AuraAbilitySystemComponent = CastChecked<UAuraAbilitySystemComponent>(
+			UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn()));
+	}
+
+	return AuraAbilitySystemComponent;
 }
 
-void APlayerControllerBase::AbilityInputHeld(FGameplayTag InputTag)
+
+void APlayerControllerBase::Move(const FInputActionValue& InputActionValue)
 {
-	GEngine->AddOnScreenDebugMessage(2, 3.f, FColor::Yellow, *InputTag.ToString());
+	APawn* ControlledPawn = GetPawn();
+	if (!IsValid(ControlledPawn))
+	{
+		return;
+	}
+
+	const FVector2D MoveValue = InputActionValue.Get<FVector2D>();
+	const FRotator Rotation = FRotator(0.0f, GetControlRotation().Yaw, 0.0f);
+	const FVector ForwardDirection = FRotationMatrix(Rotation).GetUnitAxis(EAxis::X);
+	const FVector RightDirection = FRotationMatrix(Rotation).GetUnitAxis(EAxis::Y);
+
+	ControlledPawn->AddMovementInput(ForwardDirection, MoveValue.Y);
+	ControlledPawn->AddMovementInput(RightDirection, MoveValue.X);
 }
 
-void APlayerControllerBase::AbilityInputReleased(FGameplayTag InputTag)
+
+void APlayerControllerBase::AbilityInputPressed(const FGameplayTag InputTag)
 {
-	GEngine->AddOnScreenDebugMessage(3, 3.f, FColor::Red, *InputTag.ToString());
+	//
+}
+
+void APlayerControllerBase::AbilityInputHeld(const FGameplayTag InputTag)
+{
+	if (GetAuraASC() == nullptr)
+	{
+		return;
+	}
+
+	AuraAbilitySystemComponent->AbilityInputHeldHandle(InputTag);
+}
+
+void APlayerControllerBase::AbilityInputReleased(const FGameplayTag InputTag)
+{
+	if (GetAuraASC() == nullptr)
+	{
+		return;
+	}
+
+	AuraAbilitySystemComponent->AbilityInputReleasedHandle(InputTag);
 }
