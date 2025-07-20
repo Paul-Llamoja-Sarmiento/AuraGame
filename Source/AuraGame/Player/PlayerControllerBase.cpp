@@ -6,6 +6,7 @@
 #include "InputMappingContext.h"
 #include "NavigationPath.h"
 #include "NavigationSystem.h"
+#include "AuraGame/AuraGame.h"
 #include "AuraGame/AuraGameplayTags.h"
 #include "AuraGame/GameplayAbilitySystem/AuraAbilitySystemComponent.h"
 #include "AuraGame/Input/AuraInputComponent.h"
@@ -174,7 +175,7 @@ void APlayerControllerBase::AbilityInputHeld(const FGameplayTag InputTag)
 
 	FollowTime += GetWorld()->GetDeltaSeconds();
 	FHitResult CursorHitResult;
-	if (GetHitResultUnderCursor(ECC_Visibility, false, CursorHitResult))
+	if (GetHitResultUnderCursor(ECC_Navigation, false, CursorHitResult))
 	{
 		CachedDestination = CursorHitResult.ImpactPoint;
 	}
