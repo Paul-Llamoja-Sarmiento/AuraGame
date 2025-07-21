@@ -27,6 +27,8 @@ It’s based primarily on the following resources:
 
 👉[Attribute Menu](https://youtu.be/z14QqKJltBo)
 
+👉[Point-and-Click + Click-Held movement](https://youtu.be/qP0CTIqUsfQ)
+
 ## 🚀 Getting Started
 
 1. Clone this repository:
