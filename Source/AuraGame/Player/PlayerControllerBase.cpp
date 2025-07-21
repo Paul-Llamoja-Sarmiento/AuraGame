@@ -53,8 +53,7 @@ void APlayerControllerBase::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 
-	AutoRunComponent = InPawn ? InPawn->FindComponentByClass<UAutoRunComponent>() : nullptr;
-	AuraAbilitySystemComponent = GetAuraASC();
+	UpdatePawnDependentReferences();
 }
 
 
@@ -62,8 +61,7 @@ void APlayerControllerBase::OnRep_Pawn()
 {
 	Super::OnRep_Pawn();
 
-	AutoRunComponent = GetPawn() ? GetPawn()->FindComponentByClass<UAutoRunComponent>() : nullptr;
-	AuraAbilitySystemComponent = GetAuraASC();
+	UpdatePawnDependentReferences();
 }
 
 
@@ -191,4 +189,11 @@ void APlayerControllerBase::StopAutoRunMovement() const
 	{
 		AutoRunComponent->StopAutoRun();
 	}
+}
+
+void APlayerControllerBase::UpdatePawnDependentReferences()
+{
+	const APawn* ControlledPawn = GetPawn();
+	AutoRunComponent = ControlledPawn ? ControlledPawn->FindComponentByClass<UAutoRunComponent>() : nullptr;
+	AuraAbilitySystemComponent = GetAuraASC();
 }

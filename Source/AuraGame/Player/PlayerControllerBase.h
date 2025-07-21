@@ -70,6 +70,8 @@ private:
 	void ConfigureInputMode();
 
 	void StopAutoRunMovement() const;
+
+	void UpdatePawnDependentReferences();
 	
 	UPROPERTY()
 	TObjectPtr<UAutoRunComponent> AutoRunComponent;
