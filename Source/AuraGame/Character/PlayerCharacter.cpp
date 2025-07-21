@@ -2,9 +2,10 @@
 #include "PlayerCharacter.h"
 
 #include "AbilitySystemComponent.h"
-#include "AuraGame/GameplayAbilitySystem/AuraAttributeSet.h"
+#include "AuraGame/Components/AutoRunComponent.h"
 #include "AuraGame/Player/PlayerStateBase.h"
 #include "AuraGame/UI/HUD/HUDInterface.h"
+#include "Components/SplineComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/HUD.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -20,6 +21,9 @@ APlayerCharacter::APlayerCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
+
+	AutoRunComponent = CreateDefaultSubobject<UAutoRunComponent>(TEXT("AutoRunComponent"));
+	SplineComponent = CreateDefaultSubobject<USplineComponent>(TEXT("SplineComponent"));
 }
 
 void APlayerCharacter::PossessedBy(AController* NewController)

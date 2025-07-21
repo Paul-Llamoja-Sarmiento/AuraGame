@@ -16,9 +16,9 @@ APlayerControllerBase::APlayerControllerBase()
 {
 	bReplicates = true;
 	
-	AutoRunComponent = CreateDefaultSubobject<UAutoRunComponent>(TEXT("AutoRunComponent"));
 	HighlightingComponent = CreateDefaultSubobject<UHighlightingComponent>(TEXT("HighlightingComponent"));
 }
+
 
 void APlayerControllerBase::BeginPlay()
 {
@@ -35,6 +35,7 @@ void APlayerControllerBase::BeginPlay()
 	ConfigureInputMode();
 }
 
+
 void APlayerControllerBase::SetupInputComponent()
 {
 	Super::SetupInputComponent();
@@ -48,11 +49,26 @@ void APlayerControllerBase::SetupInputComponent()
 }
 
 
+void APlayerControllerBase::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+
+	AutoRunComponent = InPawn ? InPawn->FindComponentByClass<UAutoRunComponent>() : nullptr;
+	AuraAbilitySystemComponent = GetAuraASC();
+}
+
+
+void APlayerControllerBase::OnRep_Pawn()
+{
+	Super::OnRep_Pawn();
+
+	AutoRunComponent = GetPawn() ? GetPawn()->FindComponentByClass<UAutoRunComponent>() : nullptr;
+	AuraAbilitySystemComponent = GetAuraASC();
+}
+
+
 UAuraAbilitySystemComponent* APlayerControllerBase::GetAuraASC()
 {
-	// TODO: AuraAbilitySystemComponent may be null or change if the controlled pawn changes.
-	// Consider caching it or updating it when the pawn changes. OnPossess and OnUnPossess are good candidates for this,
-	// but they are called on the server, so we need to ensure the client has the correct reference.
 	if (!IsValid(AuraAbilitySystemComponent))
 	{
 		APawn* ControlledPawn = GetPawn();
@@ -82,11 +98,7 @@ void APlayerControllerBase::Move(const FInputActionValue& InputActionValue)
 		return;
 	}
 
-	if (AutoRunComponent->IsAutoRunning())
-	{
-		AutoRunComponent->StopAutoRun();
-	}
-
+	StopAutoRunMovement();
 	const FVector2D MoveValue = InputActionValue.Get<FVector2D>();
 	const FRotator Rotation = FRotator(0.0f, GetControlRotation().Yaw, 0.0f);
 	const FVector ForwardDirection = FRotationMatrix(Rotation).GetUnitAxis(EAxis::X);
@@ -102,10 +114,7 @@ void APlayerControllerBase::AbilityInputPressed(const FGameplayTag InputTag)
 	if (InputTag.MatchesTagExact(Input_RMB))
 	{
 		bIsTargeting = HighlightingComponent->HasCurrentHighlightedActor();
-		if (AutoRunComponent->IsAutoRunning())
-		{
-			AutoRunComponent->StopAutoRun();
-		}
+		StopAutoRunMovement();
 	}
 }
 
@@ -138,7 +147,7 @@ void APlayerControllerBase::AbilityInputReleased(const FGameplayTag InputTag)
 
 	// If the player has held the left mouse button for a short time, we will start auto-running.
 	APawn* ControlledPawn = GetPawn();
-	if (FollowTime <= ShortPressThresholdInSeconds && IsValid(ControlledPawn))
+	if (FollowTime <= ShortPressThresholdInSeconds && IsValid(ControlledPawn) && IsValid(AutoRunComponent))
 	{
 		AutoRunComponent->TryAutoRunToCursorLocation(this);
 	}
@@ -146,6 +155,7 @@ void APlayerControllerBase::AbilityInputReleased(const FGameplayTag InputTag)
 	bIsTargeting = false;
 	FollowTime = 0.f;
 }
+
 
 void APlayerControllerBase::HandleDirectMovementInput()
 {
@@ -162,6 +172,7 @@ void APlayerControllerBase::HandleDirectMovementInput()
 	}	
 }
 
+
 void APlayerControllerBase::ConfigureInputMode()
 {
 	bShowMouseCursor = true;
@@ -171,4 +182,13 @@ void APlayerControllerBase::ConfigureInputMode()
 	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 	InputMode.SetHideCursorDuringCapture(false);
 	SetInputMode(InputMode);
+}
+
+
+void APlayerControllerBase::StopAutoRunMovement() const
+{
+	if (IsValid(AutoRunComponent) && AutoRunComponent->IsAutoRunning())
+	{
+		AutoRunComponent->StopAutoRun();
+	}
 }

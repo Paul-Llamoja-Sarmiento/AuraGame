@@ -23,13 +23,16 @@ public:
 	
 	bool IsAutoRunning() const { return bIsAutoRunning; }
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AutoRun")
-	float AcceptanceRadius = 50.f;
-
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 						   FActorComponentTickFunction* ThisTickFunction) override;
 
 protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AutoRun|Navigation")
+	float AcceptanceRadius = 50.f;
+
+	UPROPERTY(EditDefaultsOnly, Category="AutoRun|Movement")
+	FVector NavQueryExtent = FVector(400.f, 400.f, 250.f);
+	
 	virtual void BeginPlay() override;
 
 private:
@@ -40,6 +43,6 @@ private:
 	UPROPERTY()
 	TObjectPtr<APawn> CurrentPawn = nullptr;
 	
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY()
 	TObjectPtr<USplineComponent> SplineComponent = nullptr;
 };

@@ -15,13 +15,7 @@ UAutoRunComponent::UAutoRunComponent()
 void UAutoRunComponent::TryAutoRunToCursorLocation(const APlayerController* PlayerController)
 {
 	auto NavSystem = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld());
-	if (!IsValid(NavSystem) || !IsValid(PlayerController) || !IsValid(SplineComponent))
-	{
-		return;
-	}
-
-	APawn* ControlledPawn = PlayerController->GetPawn();
-	if (!IsValid(ControlledPawn))
+	if (!IsValid(NavSystem) || !IsValid(PlayerController) || !IsValid(SplineComponent) || !IsValid(CurrentPawn))
 	{
 		return;
 	}
@@ -40,7 +34,7 @@ void UAutoRunComponent::TryAutoRunToCursorLocation(const APlayerController* Play
 	// that we can find a point on the NavMesh even if the cursor is far away from it. This is suitable for
 	// our level design, but it may be adjusted different if needed
 	FNavLocation ImpactPointNavLocation;
-	const FVector QueryingExtent = FVector(400.0f, 400.0f, 250.0f);
+	const FVector QueryingExtent = NavQueryExtent;
 	const FNavAgentProperties& NavAgentProps = PlayerController->GetNavAgentPropertiesRef();
 	const bool bNavLocationFound = NavSystem->ProjectPointToNavigation(NavChannelCursorHitResult.ImpactPoint,
 																	   ImpactPointNavLocation, QueryingExtent,
@@ -50,7 +44,6 @@ void UAutoRunComponent::TryAutoRunToCursorLocation(const APlayerController* Play
 		return;
 	}
 	
-	CurrentPawn = ControlledPawn;
 	UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(
 		GetWorld(), CurrentPawn->GetActorLocation(), ImpactPointNavLocation.Location);
 
@@ -73,7 +66,24 @@ void UAutoRunComponent::StopAutoRun()
 	if (bIsAutoRunning)
 	{
 		bIsAutoRunning = false;
-		CurrentPawn = nullptr;
+	}
+}
+
+void UAutoRunComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	CurrentPawn = Cast<APawn>(GetOwner());
+	if (!IsValid(CurrentPawn))
+	{
+		UE_LOG(LogTemp, Error, TEXT("AutoRunComponent: Owner isn’t a Pawn! or is nullptr"));
+		return;
+	}
+
+	SplineComponent = GetOwner()->FindComponentByClass<USplineComponent>();
+	if (!IsValid(SplineComponent))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("AutoRunComponent: No SplineComponent found on %s"), *GetOwner()->GetName());
 	}
 }
 
@@ -99,20 +109,3 @@ void UAutoRunComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 		StopAutoRun();
 	}
 }
-
-void UAutoRunComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	if (AActor* Owner = GetOwner())
-	{
-		USceneComponent* RootComp = Owner->GetRootComponent();
-		if (RootComp)
-		{
-			SplineComponent = NewObject<USplineComponent>(Owner, TEXT("SplineComponent"));
-			SplineComponent->SetupAttachment(RootComp);
-			SplineComponent->RegisterComponent();
-		}
-	}
-}
-

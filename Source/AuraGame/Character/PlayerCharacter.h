@@ -6,6 +6,9 @@
 #include "Base/CharacterBase.h"
 #include "PlayerCharacter.generated.h"
 
+class USplineComponent;
+class UAutoRunComponent;
+
 UCLASS(Abstract)
 class AURAGAME_API APlayerCharacter : public ACharacterBase, public ICombatInterface
 {
@@ -27,6 +30,12 @@ protected:
 private:
 	UPROPERTY(EditAnywhere, Category = "Movement")
 	float BaseTurnRate = 400.0f;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UAutoRunComponent> AutoRunComponent = nullptr;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USplineComponent> SplineComponent = nullptr;
 
 	/**
 	 * This method must be called from PossessedBy (server-side) and OnRep_PlayerState (client-side).

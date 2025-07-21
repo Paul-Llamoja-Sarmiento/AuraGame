@@ -33,6 +33,10 @@ protected:
 	
 	virtual void SetupInputComponent() override;
 
+	virtual void OnPossess(APawn* InPawn) override;
+	
+	virtual void OnRep_Pawn() override;
+
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputMappingContext> MappingContext;
@@ -64,8 +68,10 @@ private:
 	void HandleDirectMovementInput();
 
 	void ConfigureInputMode();
+
+	void StopAutoRunMovement() const;
 	
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY()
 	TObjectPtr<UAutoRunComponent> AutoRunComponent;
 
 	UPROPERTY(VisibleAnywhere)
