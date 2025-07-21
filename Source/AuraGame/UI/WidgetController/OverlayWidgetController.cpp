@@ -2,6 +2,7 @@
 #include "OverlayWidgetController.h"
 
 #include "AuraGame/AuraGameplayTags.h"
+#include "AuraGame/GameplayAbilitySystem/AuraAbilitySystemComponent.h"
 #include "AuraGame/GameplayAbilitySystem/AuraAttributeSet.h"
 #include "AuraGame/UI/Data/UIMessageData.h"
 #include "AuraGame/UI/Widget/OverlayWidgetInterface.h"
@@ -123,17 +124,17 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 		}
 	);
 
-	GameplayEffectBinding = AbilitySystemComponent->OnGameplayEffectAppliedDelegateToSelf.AddUObject(
-		this, &UOverlayWidgetController::OnGameplayEffectAppliedToSelfHandle);
+	UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent);
+	if (IsValid(AuraASC))
+	{
+		GameplayEffectBinding = AuraASC->OnEffectTagContainerReceived.AddUObject(
+			this, &UOverlayWidgetController::OnGameplayEffectAppliedToSelfHandle);
+	}
 }
 
 
-void UOverlayWidgetController::OnGameplayEffectAppliedToSelfHandle(UAbilitySystemComponent* ASC,
-                                                                   const FGameplayEffectSpec& EffectSpec,
-                                                                   FActiveGameplayEffectHandle ActiveEffectHandle)
+void UOverlayWidgetController::OnGameplayEffectAppliedToSelfHandle(const FGameplayTagContainer& TagContainer)
 {
-	FGameplayTagContainer TagContainer;
-	EffectSpec.GetAllAssetTags(TagContainer);
 	for (const auto& Tag : TagContainer)
 	{
 		if (!UIMessagesMap.Contains(Tag) || !IsValid(ControlledWidget))

@@ -9,6 +9,14 @@ UAuraAbilitySystemComponent::UAuraAbilitySystemComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
+void UAuraAbilitySystemComponent::OnAbilityActorInfoSet()
+{
+	if (GetOwner()->HasAuthority())
+	{
+		OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UAuraAbilitySystemComponent::ClientEffectApplied);
+	}
+}
+
 void UAuraAbilitySystemComponent::GrantCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities)
 {
 	for (const auto& Ability : StartupAbilities)
@@ -54,5 +62,13 @@ void UAuraAbilitySystemComponent::AbilityInputReleasedHandle(const FGameplayTag&
 		
 		AbilitySpecInputReleased(AbilitySpec);
 	}
+}
+
+void UAuraAbilitySystemComponent::ClientEffectApplied_Implementation(UAbilitySystemComponent* AbilitySystemComponent,
+	const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle)
+{
+	FGameplayTagContainer TagContainer;
+	EffectSpec.GetAllAssetTags(TagContainer);
+	OnEffectTagContainerReceived.Broadcast(TagContainer);
 }
 

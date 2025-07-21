@@ -40,7 +40,5 @@ private:
 	FDelegateHandle MaxManaAttributeBinding;
 	FDelegateHandle GameplayEffectBinding;
 
-	void OnGameplayEffectAppliedToSelfHandle(UAbilitySystemComponent* ASC,
-											 const FGameplayEffectSpec& EffectSpec,
-											 FActiveGameplayEffectHandle ActiveEffectHandle);
+	void OnGameplayEffectAppliedToSelfHandle(const FGameplayTagContainer& TagContainer);
 };

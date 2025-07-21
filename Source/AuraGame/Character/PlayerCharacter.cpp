@@ -3,6 +3,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "AuraGame/Components/AutoRunComponent.h"
+#include "AuraGame/GameplayAbilitySystem/AuraAbilitySystemComponent.h"
 #include "AuraGame/Player/PlayerStateBase.h"
 #include "AuraGame/UI/HUD/HUDInterface.h"
 #include "Components/SplineComponent.h"
@@ -68,9 +69,14 @@ void APlayerCharacter::InitializeAbilityActorInfo()
 	APlayerStateBase* AuraPlayerState = GetPlayerState<APlayerStateBase>();
 	check(AuraPlayerState);
 	AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
-	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
 	AttributeSet = AuraPlayerState->GetAttributeSet();
-
+	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
+	UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent);
+	if (IsValid(AuraASC))
+	{
+		AuraASC->OnAbilityActorInfoSet();
+	}
+	
 	// Initialize the HUD overlay now that ASC, AttributeSet, and PlayerState are fully initialized.
 	// We do this here to avoid re-fetching these references elsewhere.
 	InitializeHUD();
