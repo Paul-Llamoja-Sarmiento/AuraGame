@@ -30,16 +30,17 @@ void UHighlightingComponent::BeginPlay()
 
 void UHighlightingComponent::PerformCursorTrace()
 {
+	LastHighlightedActor = CurrentHighlightedActor;
+	
 	FHitResult CursorHitResult;
 	CachedPlayerController->GetHitResultUnderCursor(TraceChannel, false, CursorHitResult);
 	if (!CursorHitResult.IsValidBlockingHit())
 	{
+		CurrentHighlightedActor = nullptr;
 		return;
 	}
-
-	LastHighlightedActor = CurrentHighlightedActor;
+	
 	CurrentHighlightedActor = CursorHitResult.GetActor();
-
 	if (LastHighlightedActor != CurrentHighlightedActor)
 	{
 		if (LastHighlightedActor)
