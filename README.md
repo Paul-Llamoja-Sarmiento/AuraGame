@@ -2,7 +2,19 @@
 
 A **work-in-progress** top-down action RPG built with **Unreal Engine 5** and the **Gameplay Ability System (GAS)**.
 
-The goal of this project is to learn and build a flexible RPG foundation that can be expanded with features like inventory, quests, and AI.  
+---
+
+## 🎮 Demo Preview
+
+👉[Pickup items + Basic HUD](https://youtu.be/FWDv4NXYaKQ)
+
+👉[Attribute Menu](https://youtu.be/z14QqKJltBo)
+
+👉[Point-and-Click + Click-Held movement](https://youtu.be/qP0CTIqUsfQ)
+
+---
+
+The goal of this project is to learn and build a flexible RPG foundation that can be expanded with features like inventory, quests, and AI. 
 It’s based primarily on the following resources:
 
 - 📺 [Stephen Ulibarri's GAS tutorial](https://www.udemy.com/course/unreal-engine-5-gas-top-down-rpg)
@@ -20,14 +32,6 @@ It’s based primarily on the following resources:
 - Modular code structure for future scalability
 
 ---
-
-## 🎮 Demo Preview
-
-👉[Pickup items + Basic HUD](https://youtu.be/FWDv4NXYaKQ)
-
-👉[Attribute Menu](https://youtu.be/z14QqKJltBo)
-
-👉[Point-and-Click + Click-Held movement](https://youtu.be/qP0CTIqUsfQ)
 
 ## 🚀 Getting Started
 
