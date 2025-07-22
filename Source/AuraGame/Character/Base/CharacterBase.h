@@ -29,12 +29,16 @@ public:
 
 	// ICombatInterface
 	virtual int32 IGetCharacterLevel_Implementation() const override;
+	virtual FVector GetCombatSocketLocation() const override;
 
 protected:
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, Category = "Combat")
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	FName WeaponTipSocketName;
 
 	UPROPERTY(VisibleAnywhere, Category = "Combat")
 	FName WeaponSocketName = "weapon-socket";

@@ -4,11 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "CombatInterface.generated.h"
+#include "ProjectileInterface.generated.h"
 
+class UProjectileMovementComponent;
 // This class does not need to be modified.
 UINTERFACE()
-class UCombatInterface : public UInterface
+class UProjectileInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -16,14 +17,11 @@ class UCombatInterface : public UInterface
 /**
  * 
  */
-class AURAGAME_API ICombatInterface
+class AURAGAME_API IProjectileInterface
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	int32 IGetCharacterLevel() const;
-
-	virtual FVector GetCombatSocketLocation() const = 0;
+	virtual UProjectileMovementComponent* GetProjectileMovementComponent() const = 0;
 };

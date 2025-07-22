@@ -20,6 +20,12 @@ int32 ACharacterBase::IGetCharacterLevel_Implementation() const
 	return 1; // Default level, it can be overridden in derived classes
 }
 
+FVector ACharacterBase::GetCombatSocketLocation() const
+{
+	check(WeaponMesh);
+	return WeaponMesh->GetSocketLocation(WeaponTipSocketName);
+}
+
 void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();

@@ -28,6 +28,7 @@ public:
 
 	// ICombatInterface
 	virtual int32 IGetCharacterLevel_Implementation() const override { return Level; }
+	virtual FVector GetCombatSocketLocation() const override { return FVector::ZeroVector; }
 
 	UAuraAttributeSet* GetAttributeSet() { return AttributeSet; }
 

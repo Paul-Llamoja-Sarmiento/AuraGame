@@ -8,7 +8,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Abstract)
 class AURAGAME_API UGameplayAbilityBase : public UGameplayAbility
 {
 	GENERATED_BODY()
