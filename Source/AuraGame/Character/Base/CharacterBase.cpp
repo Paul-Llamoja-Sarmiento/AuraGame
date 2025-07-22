@@ -15,6 +15,11 @@ ACharacterBase::ACharacterBase()
 }
 
 
+int32 ACharacterBase::IGetCharacterLevel_Implementation() const
+{
+	return 1; // Default level, it can be overridden in derived classes
+}
+
 void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();

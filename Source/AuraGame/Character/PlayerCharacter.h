@@ -2,7 +2,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AuraGame/Interaction/CombatInterface.h"
 #include "Base/CharacterBase.h"
 #include "PlayerCharacter.generated.h"
 
@@ -10,7 +9,7 @@ class USplineComponent;
 class UAutoRunComponent;
 
 UCLASS(Abstract)
-class AURAGAME_API APlayerCharacter : public ACharacterBase, public ICombatInterface
+class AURAGAME_API APlayerCharacter : public ACharacterBase
 {
 	GENERATED_BODY()
 

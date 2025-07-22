@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
+#include "AuraGame/Interaction/CombatInterface.h"
 #include "GameFramework/Character.h"
 #include "CharacterBase.generated.h"
 
@@ -14,7 +15,7 @@ class UAbilitySystemComponent;
 
 
 UCLASS(Abstract)
-class AURAGAME_API ACharacterBase : public ACharacter, public IAbilitySystemInterface
+class AURAGAME_API ACharacterBase : public ACharacter, public IAbilitySystemInterface, public ICombatInterface
 {
 	GENERATED_BODY()
 
@@ -25,6 +26,9 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
 
 	UAuraAttributeSet* GetAttributeSet() { return AttributeSet; }
+
+	// ICombatInterface
+	virtual int32 IGetCharacterLevel_Implementation() const override;
 
 protected:
 	virtual void BeginPlay() override;

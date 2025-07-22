@@ -2,13 +2,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AuraGame/Interaction/CombatInterface.h"
 #include "AuraGame/Interaction/HighlightableActor.h"
 #include "Base/CharacterBase.h"
 #include "EnemyCharacter.generated.h"
 
 UCLASS(Abstract)
-class AURAGAME_API AEnemyCharacter : public ACharacterBase, public IHighlightableActor, public ICombatInterface
+class AURAGAME_API AEnemyCharacter : public ACharacterBase, public IHighlightableActor
 {
 	GENERATED_BODY()
 
