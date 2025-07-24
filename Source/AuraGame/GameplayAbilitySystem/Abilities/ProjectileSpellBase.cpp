@@ -11,11 +11,17 @@ void UProjectileSpellBase::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
+	
+}
+
+void UProjectileSpellBase::SpawnProjectile() const
+{
+	const FGameplayAbilityActivationInfo ActivationInfo = GetCurrentActivationInfo();
 	if (!HasAuthority(&ActivationInfo))
 	{
 		return;
 	}
-
+	
 	ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo());
 	if (!CombatInterface)
 	{
