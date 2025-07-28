@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "ProjectileBase.generated.h"
 
+class UNiagaraSystem;
 class USphereComponent;
 
 UCLASS(Abstract)
@@ -16,6 +17,8 @@ class AURAGAME_API AProjectileBase : public AActor, public IProjectileInterface
 public:
 	AProjectileBase();
 
+	virtual void Destroyed() override;
+
 	// Projectile Interface
 	virtual UProjectileMovementComponent* GetProjectileMovementComponent() const override
 	{
@@ -23,6 +26,18 @@ public:
 	}
 
 protected:
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USphereComponent> SphereComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UAudioComponent> ProjectileAudioComponent;
+
+	UPROPERTY(EditDefaultsOnly)
+	float ProjectileLifeSpan = 10.f;
+	
 	virtual void BeginPlay() override;
 
 	UFUNCTION()
@@ -31,13 +46,20 @@ protected:
 	                        const FHitResult& SweepResult);
 
 private:
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<USphereComponent> SphereComponent;
+	bool bHasHitTarget = false;
 
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UNiagaraSystem> ImpactVisualEffect;
+
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<USoundBase> ImpactSoundEffect;
+
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<USoundBase> LoopingSoundEffect;
 
 	void CreateSphereComponent();
 
 	void CreateProjectileMovementComponent();
+
+	void ApplyImpactEffects() const;
 };

@@ -3,6 +3,9 @@
 
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "Components/AudioComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 
 AProjectileBase::AProjectileBase()
@@ -12,20 +15,53 @@ AProjectileBase::AProjectileBase()
 
 	CreateSphereComponent();	
 	CreateProjectileMovementComponent();
+	
+	ProjectileAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("ProjectileAudioComponent"));
 }
+
+void AProjectileBase::Destroyed()
+{
+	// Ensure impact effects are played on clients if the projectile was destroyed without registering a hit.
+	// This handles cases where the projectile expires or is destroyed by other means,
+	// and prevents missing visuals/audio in non-authoritative instances (clients).
+	if (!bHasHitTarget && !HasAuthority())
+	{
+		ApplyImpactEffects();
+	}
+	
+	Super::Destroyed();
+}
+
 
 void AProjectileBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AProjectileBase::OnSphereOverlapped);
+	SetLifeSpan(ProjectileLifeSpan);
 	
+	ProjectileAudioComponent->SetSound(LoopingSoundEffect);
+	ProjectileAudioComponent->Play();
+
+	SphereComponent->IgnoreActorWhenMoving(GetInstigator(), true);
+	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AProjectileBase::OnSphereOverlapped);
 }
 
+
 void AProjectileBase::OnSphereOverlapped(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                         UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	ApplyImpactEffects();
+
+	if (HasAuthority())
+	{
+		Destroy();
+	}
+	else
+	{
+		bHasHitTarget = true;
+	}
 }
+
 
 void AProjectileBase::CreateSphereComponent()
 {
@@ -33,11 +69,24 @@ void AProjectileBase::CreateSphereComponent()
 	SetRootComponent(SphereComponent);
 }
 
+
 void AProjectileBase::CreateProjectileMovementComponent()
 {
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 	ProjectileMovementComponent->InitialSpeed = 550.f;
 	ProjectileMovementComponent->MaxSpeed = 550.f;
 	ProjectileMovementComponent->ProjectileGravityScale = 0.f;
+}
+
+
+void AProjectileBase::ApplyImpactEffects() const
+{
+	if (ProjectileAudioComponent->IsPlaying())
+	{
+		ProjectileAudioComponent->Stop();
+	}
+	
+	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), ImpactSoundEffect, GetActorLocation());
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ImpactVisualEffect, GetActorLocation());
 }
 
