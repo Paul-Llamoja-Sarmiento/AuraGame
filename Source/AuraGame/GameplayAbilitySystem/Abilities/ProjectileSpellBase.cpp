@@ -14,7 +14,7 @@ void UProjectileSpellBase::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 	
 }
 
-void UProjectileSpellBase::SpawnProjectile() const
+void UProjectileSpellBase::SpawnProjectile(const FVector& ProjectileTargetLocation)
 {
 	const FGameplayAbilityActivationInfo ActivationInfo = GetCurrentActivationInfo();
 	if (!HasAuthority(&ActivationInfo))
@@ -29,9 +29,12 @@ void UProjectileSpellBase::SpawnProjectile() const
 	}
 
 	const FVector CombatSocketLocation = CombatInterface->GetCombatSocketLocation();
+	FRotator ProjectileTargetRotation = (ProjectileTargetLocation - CombatSocketLocation).Rotation();
+	ProjectileTargetRotation.Pitch = 0.f; // Ensure the projectile is horizontal to the ground
+	
 	FTransform SpawnTransform;
 	SpawnTransform.SetLocation(CombatSocketLocation);
-	// TODO: Set the projectile rotation
+	SpawnTransform.SetRotation(ProjectileTargetRotation.Quaternion());
 
 	AProjectileBase* Projectile = GetWorld()->SpawnActorDeferred<AProjectileBase>(
 		ProjectileClass,

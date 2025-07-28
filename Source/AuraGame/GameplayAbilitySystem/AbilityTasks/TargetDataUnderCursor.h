@@ -41,7 +41,6 @@ private:
 
 	void ReceiveMouseCursorData();
 
-	UFUNCTION()
 	void OnTargetDataReplicatedHandle(const FGameplayAbilityTargetDataHandle& TargetDataHandle,
 	                                  FGameplayTag ActivationTag);
 };
