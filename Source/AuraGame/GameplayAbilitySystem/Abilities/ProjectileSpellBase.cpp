@@ -35,11 +35,11 @@ void UProjectileSpellBase::SpawnProjectile(const FVector& ProjectileTargetLocati
 	FTransform SpawnTransform;
 	SpawnTransform.SetLocation(CombatSocketLocation);
 	SpawnTransform.SetRotation(ProjectileTargetRotation.Quaternion());
-
+	
 	AProjectileBase* Projectile = GetWorld()->SpawnActorDeferred<AProjectileBase>(
 		ProjectileClass,
 		SpawnTransform,
-		GetOwningActorFromActorInfo(),
+		GetAvatarActorFromActorInfo(),
 		Cast<APawn>(GetAvatarActorFromActorInfo()),
 		ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 

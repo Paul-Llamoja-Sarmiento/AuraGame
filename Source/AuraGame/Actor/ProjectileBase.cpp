@@ -4,6 +4,7 @@
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "AuraGame/AuraGame.h"
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -42,23 +43,33 @@ void AProjectileBase::BeginPlay()
 	ProjectileAudioComponent->SetSound(LoopingSoundEffect);
 	ProjectileAudioComponent->Play();
 
-	SphereComponent->IgnoreActorWhenMoving(GetInstigator(), true);
+	SphereComponent->IgnoreActorWhenMoving(GetOwner(), true);
 	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AProjectileBase::OnSphereOverlapped);
 }
 
 
 void AProjectileBase::OnSphereOverlapped(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-                                         UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                         UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+                                         const FHitResult& SweepResult)
 {
+	if (bHasHitTarget)
+	{
+		return;
+	}
+	
+	if (OtherActor == GetOwner())
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red,
+		                                 TEXT("Projectile hit owner, this shouldn't be happening! Ignoring."));
+		return;
+	}
+
+	bHasHitTarget = true;
 	ApplyImpactEffects();
 
 	if (HasAuthority())
 	{
 		Destroy();
-	}
-	else
-	{
-		bHasHitTarget = true;
 	}
 }
 
@@ -67,6 +78,13 @@ void AProjectileBase::CreateSphereComponent()
 {
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	SetRootComponent(SphereComponent);
+
+	SphereComponent->SetCollisionObjectType(ECC_Projectile);
+	SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	SphereComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
+	SphereComponent->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Overlap);
+	SphereComponent->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Overlap);
+	SphereComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 }
 
 
@@ -81,7 +99,7 @@ void AProjectileBase::CreateProjectileMovementComponent()
 
 void AProjectileBase::ApplyImpactEffects() const
 {
-	if (ProjectileAudioComponent->IsPlaying())
+	if (IsValid(ProjectileAudioComponent) && ProjectileAudioComponent->IsPlaying())
 	{
 		ProjectileAudioComponent->Stop();
 	}
