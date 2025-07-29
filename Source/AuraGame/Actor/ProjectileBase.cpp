@@ -45,7 +45,6 @@ void AProjectileBase::BeginPlay()
 	ProjectileAudioComponent->SetSound(LoopingSoundEffect);
 	ProjectileAudioComponent->Play();
 
-	SphereComponent->IgnoreActorWhenMoving(GetOwner(), true);
 	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AProjectileBase::OnSphereOverlapped);
 }
 
@@ -54,15 +53,8 @@ void AProjectileBase::OnSphereOverlapped(UPrimitiveComponent* OverlappedComponen
                                          UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
                                          const FHitResult& SweepResult)
 {
-	if (bHasHitTarget)
+	if (bHasHitTarget || OtherActor == GetOwner())
 	{
-		return;
-	}
-	
-	if (OtherActor == GetOwner())
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
-		                                 TEXT("Projectile hit owner, this shouldn't be happening! Ignoring."));
 		return;
 	}
 

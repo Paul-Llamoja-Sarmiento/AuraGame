@@ -19,14 +19,14 @@ class AURAGAME_API UOverlayWidgetController : public UWidgetControllerBase
 	GENERATED_BODY()
 
 public:
-	// UAuraWidgetController
+	// UWidgetControllerBase
 	virtual void InitializeAuraWidgetController(const FWidgetControllerParams& InParams) override;
 	virtual void CleanupController() override;
 
 	void SetAttributeButtonEnabled(bool bEnabled) const;
 
 protected:
-	// UAuraWidgetController
+	// UWidgetControllerBase
 	virtual void BroadcastInitialValues() override;
 	virtual void BindCallbacksToDependencies() override;
 

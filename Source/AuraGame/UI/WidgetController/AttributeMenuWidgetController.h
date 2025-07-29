@@ -20,7 +20,7 @@ class AURAGAME_API UAttributeMenuWidgetController : public UWidgetControllerBase
 {
 	GENERATED_BODY()
 public:
-	// UAuraWidgetController
+	// UWidgetControllerBase
 	virtual void InitializeAuraWidgetController(const FWidgetControllerParams& InParams) override;
 	virtual void CleanupController() override;
 
@@ -31,7 +31,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UAttributeInfo> AttributeInfoData;
 	
-	// UAuraWidgetController
+	// UWidgetControllerBase
 	virtual void BroadcastInitialValues() override;
 	virtual void BindCallbacksToDependencies() override;
 

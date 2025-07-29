@@ -4,6 +4,9 @@
 #include "AuraGame/AuraGame.h"
 #include "AuraGame/GameplayAbilitySystem/AuraAbilitySystemComponent.h"
 #include "AuraGame/GameplayAbilitySystem/AuraAttributeSet.h"
+#include "AuraGame/UI/WidgetController/EnemyWidgetController.h"
+#include "AuraGame/UI/WidgetController/Base/WidgetControllerBase.h"
+#include "Components/WidgetComponent.h"
 
 
 AEnemyCharacter::AEnemyCharacter()
@@ -11,7 +14,11 @@ AEnemyCharacter::AEnemyCharacter()
 	// Mesh must block Visibility to be hit by cursor traces (e.g., mouse hover).
 	// Consider creating a custom collision preset if more changes are needed.
 	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+	
 	CreateGameplayAbilitySystemObjects();
+
+	HealthBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBarWidget"));
+	HealthBarWidget->SetupAttachment(GetRootComponent());
 }
 
 void AEnemyCharacter::IHighlight_Implementation()
@@ -43,8 +50,26 @@ void AEnemyCharacter::InitializeAbilityActorInfo()
 	check(AbilitySystemComponent);
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->OnAbilityActorInfoSet();
+
+	// Initialize health bar widget after ASC is set up.
+	InitializeHealthWidgetBar();
 	
 	InitializeDefaultAttributes();
+}
+
+void AEnemyCharacter::InitializeHealthWidgetBar()
+{
+	checkf(EnemyWidgetControllerClass, TEXT("EnemyWidgetControllerClass must be set in EnemyCharacter!"));
+
+	UUserWidget* HealthBarUserWidget = HealthBarWidget->GetUserWidgetObject();
+	if (!IsValid(HealthBarUserWidget))
+	{
+		return;
+	}
+	
+	const FWidgetControllerParams Params(HealthBarUserWidget, nullptr, nullptr, AbilitySystemComponent, AttributeSet);
+	EnemyWidgetController = NewObject<UEnemyWidgetController>(this, EnemyWidgetControllerClass);
+	EnemyWidgetController->InitializeAuraWidgetController(Params);
 }
 
 void AEnemyCharacter::CreateGameplayAbilitySystemObjects()
