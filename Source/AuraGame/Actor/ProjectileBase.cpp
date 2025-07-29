@@ -59,7 +59,7 @@ void AProjectileBase::OnSphereOverlapped(UPrimitiveComponent* OverlappedComponen
 	
 	if (OtherActor == GetOwner())
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red,
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
 		                                 TEXT("Projectile hit owner, this shouldn't be happening! Ignoring."));
 		return;
 	}
