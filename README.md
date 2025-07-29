@@ -12,6 +12,8 @@ A **work-in-progress** top-down action RPG built with **Unreal Engine 5** and th
 
 👉[Point-and-Click + Click-Held movement](https://youtu.be/qP0CTIqUsfQ)
 
+👉[Firebolt spell](https://youtu.be/dKD3aKki6Sw)
+
 ---
 
 The goal of this project is to learn and build a flexible RPG foundation that can be expanded with features like inventory, quests, and AI. 
