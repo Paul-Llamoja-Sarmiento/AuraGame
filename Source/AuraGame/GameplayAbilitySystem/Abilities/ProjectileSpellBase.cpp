@@ -1,6 +1,7 @@
 ﻿
 #include "ProjectileSpellBase.h"
 
+#include "AbilitySystemComponent.h"
 #include "AuraGame/Actor/ProjectileBase.h"
 #include "AuraGame/Interaction/CombatInterface.h"
 
@@ -43,7 +44,15 @@ void UProjectileSpellBase::SpawnProjectile(const FVector& ProjectileTargetLocati
 		Cast<APawn>(GetAvatarActorFromActorInfo()),
 		ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
-	// TODO: Give the projectile a Gameplay Effect for causing damage
-
+	UAbilitySystemComponent* SourceASC = GetAbilitySystemComponentFromActorInfo();
+	if (IsValid(SourceASC))
+	{
+		FGameplayEffectContextHandle EffectContextHandle = SourceASC->MakeEffectContext();
+		EffectContextHandle.AddSourceObject(GetAvatarActorFromActorInfo());
+		const FGameplayEffectSpecHandle EffectSpecHandle = SourceASC->MakeOutgoingSpec(
+			SpellEffectClass, GetAbilityLevel(), EffectContextHandle);
+		Projectile->SetProjectileEffect(EffectSpecHandle);
+	}
+	
 	Projectile->FinishSpawning(SpawnTransform);
 }

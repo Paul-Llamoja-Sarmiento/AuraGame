@@ -62,6 +62,8 @@ protected:
 
 	void AddCharacterAbilities() const;
 
+	virtual void InitializeAbilityActorInfo() {}
+
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;

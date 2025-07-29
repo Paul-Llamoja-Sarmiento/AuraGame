@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayEffectTypes.h"
 #include "ProjectileInterface.h"
 #include "GameFramework/Actor.h"
 #include "ProjectileBase.generated.h"
@@ -18,6 +19,8 @@ public:
 	AProjectileBase();
 
 	virtual void Destroyed() override;
+
+	void SetProjectileEffect(const FGameplayEffectSpecHandle& EffectHandle) { ProjectileEffect = EffectHandle; }
 
 	// Projectile Interface
 	virtual UProjectileMovementComponent* GetProjectileMovementComponent() const override
@@ -57,9 +60,13 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<USoundBase> LoopingSoundEffect;
 
+	FGameplayEffectSpecHandle ProjectileEffect;
+
 	void CreateSphereComponent();
 
 	void CreateProjectileMovementComponent();
 
 	void ApplyImpactEffects() const;
+
+	void ApplyProjectileEffect(AActor* OtherActor) const;
 };

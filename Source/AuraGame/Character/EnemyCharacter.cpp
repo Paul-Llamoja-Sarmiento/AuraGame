@@ -33,10 +33,18 @@ void AEnemyCharacter::BeginPlay()
 	GetMesh()->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
 	WeaponMesh->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
 
+	InitializeAbilityActorInfo();
+}
+
+void AEnemyCharacter::InitializeAbilityActorInfo()
+{
 	// Initialize ASC with this actor as both Owner and Avatar.
 	// Done in BeginPlay because AI characters don’t have full context during construction.
 	check(AbilitySystemComponent);
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->OnAbilityActorInfoSet();
+	
+	InitializeDefaultAttributes();
 }
 
 void AEnemyCharacter::CreateGameplayAbilitySystemObjects()

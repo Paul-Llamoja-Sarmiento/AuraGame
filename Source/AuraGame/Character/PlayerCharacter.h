@@ -24,7 +24,14 @@ public:
 	virtual int32 IGetCharacterLevel_Implementation() const override;
 
 protected:
-	virtual void BeginPlay() override;	
+	virtual void BeginPlay() override;
+
+	/**
+	 * This method must be called from PossessedBy (server-side) and OnRep_PlayerState (client-side).
+	 * Ensures the ASC is initialized with correct owner/avatar references on both ends.
+	 * Do NOT call from the constructor — ASC setup depends on replicated data (PlayerState).
+	 */
+	virtual void InitializeAbilityActorInfo() override;
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Movement")
@@ -35,13 +42,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USplineComponent> SplineComponent = nullptr;
-
-	/**
-	 * This method must be called from PossessedBy (server-side) and OnRep_PlayerState (client-side).
-	 * Ensures the ASC is initialized with correct owner/avatar references on both ends.
-	 * Do NOT call from the constructor — ASC setup depends on replicated data (PlayerState).
-	 */
-	void InitializeAbilityActorInfo();
 
 	void InitializeHUD() const;
 };

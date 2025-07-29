@@ -27,6 +27,8 @@ protected:
 	
 	virtual void BeginPlay() override;
 
+	virtual void InitializeAbilityActorInfo() override;
+
 private:
 	void CreateGameplayAbilitySystemObjects();
 };

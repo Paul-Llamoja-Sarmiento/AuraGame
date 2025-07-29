@@ -1,6 +1,8 @@
 ﻿
 #include "ProjectileBase.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "NiagaraFunctionLibrary.h"
@@ -69,6 +71,7 @@ void AProjectileBase::OnSphereOverlapped(UPrimitiveComponent* OverlappedComponen
 
 	if (HasAuthority())
 	{
+		ApplyProjectileEffect(OtherActor);
 		Destroy();
 	}
 }
@@ -106,5 +109,14 @@ void AProjectileBase::ApplyImpactEffects() const
 	
 	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), ImpactSoundEffect, GetActorLocation());
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ImpactVisualEffect, GetActorLocation());
+}
+
+void AProjectileBase::ApplyProjectileEffect(AActor* OtherActor) const
+{
+	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OtherActor);
+	if (IsValid(TargetASC) && ProjectileEffect.IsValid())
+	{
+		TargetASC->ApplyGameplayEffectSpecToSelf(*ProjectileEffect.Data);
+	}
 }
 

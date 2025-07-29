@@ -7,6 +7,7 @@
 
 
 class AProjectileBase;
+class UGameplayEffect;
 
 
 /**
@@ -20,6 +21,9 @@ class AURAGAME_API UProjectileSpellBase : public UGameplayAbilityBase
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<AProjectileBase> ProjectileClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<UGameplayEffect> SpellEffectClass;
 	
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 	                             const FGameplayAbilityActivationInfo ActivationInfo,
