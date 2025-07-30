@@ -23,7 +23,8 @@ struct FGameplayEffectProperties
 
 	FGameplayEffectContextHandle EffectContextHandle;
 
-	// Source Data
+	/* Source Data, this should belong to the instigator */
+	
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> SourceASC = nullptr;
 
@@ -36,7 +37,8 @@ struct FGameplayEffectProperties
 	UPROPERTY()
 	TObjectPtr<ACharacter> SourceCharacter = nullptr;
 	
-	// Target Data
+	/* Target Data, this should belong to our Owner */ 
+	
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> TargetASC = nullptr;
 
@@ -63,12 +65,14 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	// UAttributeSet
+	/* UAttributeSet */
+	
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData &Data) override;
 
 	
-	// Vital Attributes
+	/* Vital Attributes */
+	
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_Health, Category="Vital Attributes")
 	FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Health);
@@ -78,7 +82,8 @@ public:
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Mana);
 
 	
-	// Primary Attributes
+	/* Primary Attributes */
+	
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_Strength, Category="Primary Attributes")
 	FGameplayAttributeData Strength;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Strength);
@@ -96,7 +101,8 @@ public:
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Vigor);
 	
 
-	// Secondary Attributes
+	/* Secondary Attributes */
+	
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_Armor, Category="Secondary Attributes")
 	FGameplayAttributeData Armor;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Armor);
@@ -136,9 +142,16 @@ public:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_MaxMana, Category="Secondary Attributes")
 	FGameplayAttributeData MaxMana;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxMana);
+
+	/* Meta Attributes */
+
+	UPROPERTY(BlueprintReadOnly, Category="Meta Attributes")
+	FGameplayAttributeData IncomingDamage;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, IncomingDamage);
 	
 	
-	// Replication callback for Attributes
+	/* Replication callback for Attributes */
+	
 	UFUNCTION()
 	void OnRep_Health(const FGameplayAttributeData& OldHealth) const;
 
@@ -189,4 +202,6 @@ public:
 
 private:
 	void SetGameplayEffectProperties(const FGameplayEffectModCallbackData& Data, FGameplayEffectProperties& Properties) const;
+
+	void HandleIncomingDamage();
 };

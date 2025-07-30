@@ -81,6 +81,21 @@ void UAuraAttributeSet::SetGameplayEffectProperties(const FGameplayEffectModCall
 	}
 }
 
+void UAuraAttributeSet::HandleIncomingDamage()
+{
+	const float LocalIncomingDamage = GetIncomingDamage();
+	SetIncomingDamage(0.f);
+	if (LocalIncomingDamage <= 0.f)
+	{
+		return;		
+	}
+
+	const float NewHealth = GetHealth() - LocalIncomingDamage;
+	SetHealth(FMath::Clamp(NewHealth, 0.0f, GetMaxHealth()));
+
+	const bool bIsFatalDamage = NewHealth <= 0.0f;
+}
+
 
 void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data)
 {
@@ -100,8 +115,12 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 	FGameplayEffectProperties Properties;
 	SetGameplayEffectProperties(Data, Properties);
 
+	if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
+	{
+		HandleIncomingDamage();
+	}
 	// Attribute clamping
-	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+	else if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
 	}
