@@ -2,6 +2,7 @@
 #include "ProjectileSpellBase.h"
 
 #include "AbilitySystemComponent.h"
+#include "AuraGame/AuraGameplayTags.h"
 #include "AuraGame/Actor/ProjectileBase.h"
 #include "AuraGame/Interaction/CombatInterface.h"
 
@@ -50,8 +51,11 @@ void UProjectileSpellBase::SpawnProjectile(const FVector& ProjectileTargetLocati
 	{
 		FGameplayEffectContextHandle EffectContextHandle = SourceASC->MakeEffectContext();
 		EffectContextHandle.AddSourceObject(AvatarActor);
+		
 		const FGameplayEffectSpecHandle EffectSpecHandle = SourceASC->MakeOutgoingSpec(
 			SpellEffectClass, GetAbilityLevel(), EffectContextHandle);
+		EffectSpecHandle.Data->SetSetByCallerMagnitude(Damage, 50.f); // Example of setting a damage value
+		
 		Projectile->SetProjectileEffect(EffectSpecHandle);
 	}
 	

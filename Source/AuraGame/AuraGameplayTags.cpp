@@ -39,6 +39,9 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(Input_Key_2, "Input.Key.2", "Input tag for Key 2"
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(Input_Key_3, "Input.Key.3", "Input tag for Key 3");
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(Input_Key_4, "Input.Key.4", "Input tag for Key 4");
 
+// Damage Tags
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(Damage, "Damage", "Tag used to extract damage values passed via SetByCaller in Gameplay Effects.");
+
 
 FAttributeGameplayTags FAttributeGameplayTags::AttributeGameplayTags;
 

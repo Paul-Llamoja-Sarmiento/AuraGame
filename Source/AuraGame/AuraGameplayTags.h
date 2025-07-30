@@ -42,6 +42,9 @@ UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_Key_2);
 UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_Key_3);
 UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_Key_4);
 
+// Damage Tags
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Damage);
+
 struct FAttributeGameplayTags
 {
 	static const FAttributeGameplayTags& Get() { return AttributeGameplayTags; }
