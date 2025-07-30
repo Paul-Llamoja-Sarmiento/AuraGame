@@ -22,15 +22,16 @@ void UProjectileSpellBase::SpawnProjectile(const FVector& ProjectileTargetLocati
 	{
 		return;
 	}
-	
-	ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo());
+
+	AActor* AvatarActor = GetAvatarActorFromActorInfo();
+	ICombatInterface* CombatInterface = Cast<ICombatInterface>(AvatarActor);
 	if (!CombatInterface)
 	{
 		return;
 	}
 
 	const FVector CombatSocketLocation = CombatInterface->GetCombatSocketLocation();
-	FRotator ProjectileTargetRotation = (ProjectileTargetLocation - CombatSocketLocation).Rotation();
+	FRotator ProjectileTargetRotation = (ProjectileTargetLocation - AvatarActor->GetActorLocation()).Rotation();
 	ProjectileTargetRotation.Pitch = 0.f; // Ensure the projectile is horizontal to the ground
 	
 	FTransform SpawnTransform;
@@ -40,15 +41,15 @@ void UProjectileSpellBase::SpawnProjectile(const FVector& ProjectileTargetLocati
 	AProjectileBase* Projectile = GetWorld()->SpawnActorDeferred<AProjectileBase>(
 		ProjectileClass,
 		SpawnTransform,
-		GetAvatarActorFromActorInfo(),
-		Cast<APawn>(GetAvatarActorFromActorInfo()),
+		AvatarActor,
+		Cast<APawn>(AvatarActor),
 		ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
 	UAbilitySystemComponent* SourceASC = GetAbilitySystemComponentFromActorInfo();
 	if (IsValid(SourceASC))
 	{
 		FGameplayEffectContextHandle EffectContextHandle = SourceASC->MakeEffectContext();
-		EffectContextHandle.AddSourceObject(GetAvatarActorFromActorInfo());
+		EffectContextHandle.AddSourceObject(AvatarActor);
 		const FGameplayEffectSpecHandle EffectSpecHandle = SourceASC->MakeOutgoingSpec(
 			SpellEffectClass, GetAbilityLevel(), EffectContextHandle);
 		Projectile->SetProjectileEffect(EffectSpecHandle);
