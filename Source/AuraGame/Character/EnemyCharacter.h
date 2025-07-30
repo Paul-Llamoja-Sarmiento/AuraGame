@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AuraGame/GameplayAbilitySystem/Data/CharacterClassInfo.h"
 #include "AuraGame/Interaction/HighlightableActor.h"
 #include "Base/CharacterBase.h"
 #include "EnemyCharacter.generated.h"
@@ -29,8 +30,11 @@ public:
 	virtual int32 IGetCharacterLevel_Implementation() const override { return Level; }
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Defaults Combat")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Defaults Combat")
 	int32 Level = 1;
+
+	UPROPERTY(EditDefaultsOnly,  BlueprintReadOnly, Category = "Defaults Combat")
+	ECharacterClass CharacterClass = ECharacterClass::Warrior;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> HealthBarWidget;
@@ -40,6 +44,8 @@ protected:
 	
 	virtual void BeginPlay() override;
 
+	// Character Base
+	virtual void InitializeDefaultAttributes() const override;
 	virtual void InitializeAbilityActorInfo() override;
 
 	void InitializeHealthWidgetBar();

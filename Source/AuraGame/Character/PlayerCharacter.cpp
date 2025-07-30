@@ -64,6 +64,13 @@ void APlayerCharacter::BeginPlay()
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, BaseTurnRate, 0.0f);
 }
 
+void APlayerCharacter::InitializeDefaultAttributes() const
+{
+	ApplyEffectToSelf(DefaultPrimaryAttributesEffect);
+	ApplyEffectToSelf(DefaultSecondaryAttributesEffect);
+	ApplyEffectToSelf(DefaultVitalAttributesEffect);
+}
+
 void APlayerCharacter::InitializeAbilityActorInfo()
 {
 	APlayerStateBase* AuraPlayerState = GetPlayerState<APlayerStateBase>();
@@ -99,4 +106,16 @@ void APlayerCharacter::InitializeHUD() const
 	}
 
 	IHUDInterface::Execute_IInitOverlay(HUD, PC, GetPlayerState(), AbilitySystemComponent, AttributeSet);
+}
+
+void APlayerCharacter::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& EffectClass, float InLevel) const
+{
+	check(AbilitySystemComponent);
+
+	FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
+	EffectContextHandle.AddSourceObject(this);
+	const FGameplayEffectSpecHandle EffectSpecHandle = AbilitySystemComponent->MakeOutgoingSpec(
+		EffectClass, InLevel, EffectContextHandle);
+
+	AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data);
 }

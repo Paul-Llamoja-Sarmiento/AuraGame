@@ -26,6 +26,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	// CharacterBase
+	virtual void InitializeDefaultAttributes() const;
+
 	/**
 	 * This method must be called from PossessedBy (server-side) and OnRep_PlayerState (client-side).
 	 * Ensures the ASC is initialized with correct owner/avatar references on both ends.
@@ -44,4 +47,6 @@ private:
 	TObjectPtr<USplineComponent> SplineComponent = nullptr;
 
 	void InitializeHUD() const;
+
+	void ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& EffectClass, float InLevel = 1.0f) const;
 };

@@ -58,15 +58,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Attributes")
 	TSubclassOf<UGameplayEffect> DefaultVitalAttributesEffect;
 
-	void InitializeDefaultAttributes() const;
+	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
+	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
 
 	void AddCharacterAbilities() const;
 
-	virtual void InitializeAbilityActorInfo() {}
+	virtual void InitializeDefaultAttributes() const {}
 
-private:
-	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
-	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
-	
-	void ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& EffectClass, float InLevel = 1.0f) const;
+	virtual void InitializeAbilityActorInfo() {}
 };

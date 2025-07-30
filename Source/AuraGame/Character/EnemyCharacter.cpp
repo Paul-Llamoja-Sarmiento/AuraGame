@@ -2,6 +2,7 @@
 #include "EnemyCharacter.h"
 
 #include "AuraGame/AuraGame.h"
+#include "AuraGame/GameplayAbilitySystem/AbilityFunctionLibrary.h"
 #include "AuraGame/GameplayAbilitySystem/AuraAbilitySystemComponent.h"
 #include "AuraGame/GameplayAbilitySystem/AuraAttributeSet.h"
 #include "AuraGame/UI/WidgetController/EnemyWidgetController.h"
@@ -52,6 +53,11 @@ void AEnemyCharacter::BeginPlay()
 	WeaponMesh->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
 
 	InitializeAbilityActorInfo();
+}
+
+void AEnemyCharacter::InitializeDefaultAttributes() const
+{
+	UAbilityFunctionLibrary::InitializeDefaultAttributes(GetWorld(), CharacterClass, Level, AbilitySystemComponent);
 }
 
 void AEnemyCharacter::InitializeAbilityActorInfo()

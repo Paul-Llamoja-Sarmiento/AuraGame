@@ -25,5 +25,6 @@ float UMaxHealthModMagnitudeCalc::CalculateBaseMagnitude_Implementation(const FG
 	Vigor = FMath::Max<float>(Vigor, 0.0f); // Ensure Vigor is non-negative
 	const int32 PlayerLevel = ICombatInterface::Execute_IGetCharacterLevel(Spec.GetContext().GetSourceObject());
 
-	return 80.f + (Vigor * 2.5f) + (PlayerLevel * 10.f);
+	const float MaxHealth = 80.f + (Vigor * 2.5f) + (PlayerLevel * 10.f);
+	return MaxHealth;
 }

@@ -25,5 +25,6 @@ float UMaxManaModMagnitudeCalc::CalculateBaseMagnitude_Implementation(const FGam
 	Intelligence = FMath::Max<float>(Intelligence, 0.0f); // Ensure Intelligence is non-negative
 	const int32 PlayerLevel = ICombatInterface::Execute_IGetCharacterLevel(Spec.GetContext().GetSourceObject());
 
-	return 50.f + (Intelligence * 2.5f) + (PlayerLevel * 15.f);
+	const float MaxMana = 50.f + (Intelligence * 2.5f) + (PlayerLevel * 15.f);
+	return MaxMana;
 }

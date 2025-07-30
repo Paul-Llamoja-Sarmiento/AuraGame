@@ -41,13 +41,6 @@ void ACharacterBase::BeginPlay()
 	
 }
 
-void ACharacterBase::InitializeDefaultAttributes() const
-{
-	ApplyEffectToSelf(DefaultPrimaryAttributesEffect);
-	ApplyEffectToSelf(DefaultSecondaryAttributesEffect);
-	ApplyEffectToSelf(DefaultVitalAttributesEffect);
-}
-
 void ACharacterBase::AddCharacterAbilities() const
 {
 	if (!HasAuthority())
@@ -62,17 +55,4 @@ void ACharacterBase::AddCharacterAbilities() const
 	}
 
 	AuraAbilitySystemComponent->GrantCharacterAbilities(StartupAbilities);
-}
-
-void ACharacterBase::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& EffectClass, float InLevel) const
-{
-	check(AbilitySystemComponent);
-	check(DefaultPrimaryAttributesEffect);
-
-	FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
-	EffectContextHandle.AddSourceObject(this);
-	const FGameplayEffectSpecHandle EffectSpecHandle = AbilitySystemComponent->MakeOutgoingSpec(
-		EffectClass, InLevel, EffectContextHandle);
-
-	AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data);
 }
