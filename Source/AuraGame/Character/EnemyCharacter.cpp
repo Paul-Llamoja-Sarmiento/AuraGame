@@ -21,6 +21,17 @@ AEnemyCharacter::AEnemyCharacter()
 	HealthBarWidget->SetupAttachment(GetRootComponent());
 }
 
+void AEnemyCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	if (IsValid(EnemyWidgetController))
+	{
+		EnemyWidgetController->CleanupController();
+		EnemyWidgetController = nullptr;
+	}
+	
+	Super::EndPlay(EndPlayReason);
+}
+
 void AEnemyCharacter::IHighlight_Implementation()
 {
 	GetMesh()->SetRenderCustomDepth(true);

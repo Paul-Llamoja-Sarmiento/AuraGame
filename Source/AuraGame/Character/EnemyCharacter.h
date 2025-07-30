@@ -18,6 +18,8 @@ class AURAGAME_API AEnemyCharacter : public ACharacterBase, public IHighlightabl
 
 public:
 	AEnemyCharacter();
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
 	// IHighlightableActor
 	virtual void IHighlight_Implementation() override;
