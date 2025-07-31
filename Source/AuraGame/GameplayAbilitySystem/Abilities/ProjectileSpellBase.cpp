@@ -49,12 +49,13 @@ void UProjectileSpellBase::SpawnProjectile(const FVector& ProjectileTargetLocati
 	UAbilitySystemComponent* SourceASC = GetAbilitySystemComponentFromActorInfo();
 	if (IsValid(SourceASC))
 	{
+		const float AbilityLevel = GetAbilityLevel();
 		FGameplayEffectContextHandle EffectContextHandle = SourceASC->MakeEffectContext();
 		EffectContextHandle.AddSourceObject(AvatarActor);
 		
 		const FGameplayEffectSpecHandle EffectSpecHandle = SourceASC->MakeOutgoingSpec(
-			SpellEffectClass, GetAbilityLevel(), EffectContextHandle);
-		EffectSpecHandle.Data->SetSetByCallerMagnitude(Damage, 50.f); // Example of setting a damage value
+			SpellEffectClass, AbilityLevel, EffectContextHandle);
+		EffectSpecHandle.Data->SetSetByCallerMagnitude(Damage, BaseDamage.GetValueAtLevel(AbilityLevel));
 		
 		Projectile->SetProjectileEffect(EffectSpecHandle);
 	}

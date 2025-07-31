@@ -2,7 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayAbilityBase.h"
+#include "DamageAbilityBase.h"
 #include "ProjectileSpellBase.generated.h"
 
 
@@ -14,7 +14,7 @@ class UGameplayEffect;
  * 
  */
 UCLASS(Abstract)
-class AURAGAME_API UProjectileSpellBase : public UGameplayAbilityBase
+class AURAGAME_API UProjectileSpellBase : public UDamageAbilityBase
 {
 	GENERATED_BODY()
 
