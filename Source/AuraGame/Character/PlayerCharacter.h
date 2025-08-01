@@ -24,9 +24,13 @@ public:
 	virtual int32 IGetCharacterLevel_Implementation() const override;
 
 protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
+	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
+	
 	virtual void BeginPlay() override;
 
-	// CharacterBase
+	/* CharacterBase */
+	
 	virtual void InitializeDefaultAttributes() const;
 
 	/**
@@ -49,4 +53,6 @@ private:
 	void InitializeHUD() const;
 
 	void ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& EffectClass, float InLevel = 1.0f) const;
+
+	void AddCharacterAbilities() const;
 };

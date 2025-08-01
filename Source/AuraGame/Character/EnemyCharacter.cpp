@@ -2,7 +2,8 @@
 #include "EnemyCharacter.h"
 
 #include "AuraGame/AuraGame.h"
-#include "AuraGame/GameplayAbilitySystem/AbilityFunctionLibrary.h"
+#include "AuraGame/Components/CharacterAssetComponent.h"
+#include "AuraGame/GameplayAbilitySystem/AbilityBlueprintFunctionLibrary.h"
 #include "AuraGame/GameplayAbilitySystem/AuraAbilitySystemComponent.h"
 #include "AuraGame/GameplayAbilitySystem/AuraAttributeSet.h"
 #include "AuraGame/UI/WidgetController/EnemyWidgetController.h"
@@ -20,6 +21,8 @@ AEnemyCharacter::AEnemyCharacter()
 
 	HealthBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBarWidget"));
 	HealthBarWidget->SetupAttachment(GetRootComponent());
+
+	CharacterAssetsComponent = CreateDefaultSubobject<UCharacterAssetComponent>(TEXT("CharacterAssetsComponent"));
 }
 
 void AEnemyCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -45,6 +48,12 @@ void AEnemyCharacter::IUnHighlight_Implementation()
 	WeaponMesh->SetRenderCustomDepth(false);
 }
 
+UCharacterAssetsInfo* AEnemyCharacter::IGetCharacterAssetsInfo_Implementation() const
+{
+	return CharacterAssetsComponent->GetCharacterAssetsInfo();
+}
+
+
 void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -53,11 +62,12 @@ void AEnemyCharacter::BeginPlay()
 	WeaponMesh->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
 
 	InitializeAbilityActorInfo();
+	UAbilityBlueprintFunctionLibrary::InitializeStartupAbilities(GetWorld(), AbilitySystemComponent);
 }
 
 void AEnemyCharacter::InitializeDefaultAttributes() const
 {
-	UAbilityFunctionLibrary::InitializeDefaultAttributes(GetWorld(), CharacterClass, Level, AbilitySystemComponent);
+	UAbilityBlueprintFunctionLibrary::InitializeDefaultAttributes(GetWorld(), CharacterClass, Level, AbilitySystemComponent);
 }
 
 void AEnemyCharacter::InitializeAbilityActorInfo()

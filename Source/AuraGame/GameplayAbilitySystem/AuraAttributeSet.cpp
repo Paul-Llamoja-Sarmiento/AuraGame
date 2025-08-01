@@ -3,6 +3,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GameplayEffectExtension.h"
+#include "AuraGame/AuraGameplayTags.h"
 #include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
 
@@ -81,7 +82,7 @@ void UAuraAttributeSet::SetGameplayEffectProperties(const FGameplayEffectModCall
 	}
 }
 
-void UAuraAttributeSet::HandleIncomingDamage()
+void UAuraAttributeSet::HandleIncomingDamage(const FGameplayEffectProperties& Properties)
 {
 	const float LocalIncomingDamage = GetIncomingDamage();
 	SetIncomingDamage(0.f);
@@ -94,6 +95,12 @@ void UAuraAttributeSet::HandleIncomingDamage()
 	SetHealth(FMath::Clamp(NewHealth, 0.0f, GetMaxHealth()));
 
 	const bool bIsFatalDamage = NewHealth <= 0.0f;
+	if (!bIsFatalDamage)
+	{
+		FGameplayTagContainer ReactionTags;
+		ReactionTags.AddTag(Abilities_HitReaction);
+		Properties.TargetASC->TryActivateAbilitiesByTag(ReactionTags);		
+	}
 }
 
 
@@ -117,7 +124,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 
 	if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
 	{
-		HandleIncomingDamage();
+		HandleIncomingDamage(Properties);
 	}
 	// Attribute clamping
 	else if (Data.EvaluatedData.Attribute == GetHealthAttribute())

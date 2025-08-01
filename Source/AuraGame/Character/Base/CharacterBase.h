@@ -8,6 +8,7 @@
 #include "CharacterBase.generated.h"
 
 
+class UHitReactionHandlerComponent;
 class UGameplayAbility;
 class UAuraAttributeSet;
 class UGameplayEffect;
@@ -22,17 +23,20 @@ class AURAGAME_API ACharacterBase : public ACharacter, public IAbilitySystemInte
 public:
 	ACharacterBase();
 
-	// IAbilitySystemInterface
+	/* IAbilitySystemInterface */
+	
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
 
 	UAuraAttributeSet* GetAttributeSet() { return AttributeSet; }
 
-	// ICombatInterface
+	/* ICombatInterface */
+	
 	virtual int32 IGetCharacterLevel_Implementation() const override;
 	virtual FVector GetCombatSocketLocation() const override;
 
 protected:
-	virtual void BeginPlay() override;
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UHitReactionHandlerComponent> HitReactionHandlerComponent;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
@@ -57,11 +61,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Attributes")
 	TSubclassOf<UGameplayEffect> DefaultVitalAttributesEffect;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
-	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
-
-	void AddCharacterAbilities() const;
 
 	virtual void InitializeDefaultAttributes() const {}
 

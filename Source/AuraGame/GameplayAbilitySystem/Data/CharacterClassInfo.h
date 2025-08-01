@@ -6,6 +6,7 @@
 #include "CharacterClassInfo.generated.h"
 
 
+class UGameplayAbility;
 class UGameplayEffect;
 
 
@@ -71,6 +72,10 @@ public:
 	// Default GameplayEffect for vital attributes (e.g., health, mana).
 	UPROPERTY(EditDefaultsOnly, Category = "Common Class Defaults")
 	TSubclassOf<UGameplayEffect> DefaultVitalAttributes;
+
+	// Array of default common abilities that all characters should have (e.g., hit reaction).
+	UPROPERTY(EditDefaultsOnly, Category = "Common Class Defaults")
+	TArray<TSubclassOf<UGameplayAbility>> DefaultCommonAbilities;
 
 	
 	/**

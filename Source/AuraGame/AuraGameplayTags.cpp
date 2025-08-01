@@ -42,6 +42,12 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(Input_Key_4, "Input.Key.4", "Input tag for Key 4"
 // Damage Tags
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(Damage, "Damage", "Tag used to extract damage values passed via SetByCaller in Gameplay Effects.");
 
+// Effect Tags
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(Effects_HitReaction, "Effects.HitReaction", "Tag granted to characters while hit reacting.");
+
+// Ability Tags
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(Abilities_HitReaction, "Abilities.HitReaction", "Tag used to identify the hit reaction ability.");
+
 
 FAttributeGameplayTags FAttributeGameplayTags::AttributeGameplayTags;
 

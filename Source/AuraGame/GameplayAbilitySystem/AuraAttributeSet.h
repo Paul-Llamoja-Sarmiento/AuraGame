@@ -203,5 +203,5 @@ public:
 private:
 	void SetGameplayEffectProperties(const FGameplayEffectModCallbackData& Data, FGameplayEffectProperties& Properties) const;
 
-	void HandleIncomingDamage();
+	void HandleIncomingDamage(const FGameplayEffectProperties& Properties);
 };

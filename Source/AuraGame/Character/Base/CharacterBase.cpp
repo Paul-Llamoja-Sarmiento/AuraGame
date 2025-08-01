@@ -3,6 +3,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "AuraGame/AuraGame.h"
+#include "AuraGame/Components/HitReactionHandlerComponent.h"
 #include "AuraGame/GameplayAbilitySystem/AuraAbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
 
@@ -21,6 +22,8 @@ ACharacterBase::ACharacterBase()
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
 	WeaponMesh->SetupAttachment(GetMesh(), WeaponSocketName);
 	WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	HitReactionHandlerComponent = CreateDefaultSubobject<UHitReactionHandlerComponent>(TEXT("HitReactionHandler"));
 }
 
 
@@ -35,24 +38,3 @@ FVector ACharacterBase::GetCombatSocketLocation() const
 	return WeaponMesh->GetSocketLocation(WeaponTipSocketName);
 }
 
-void ACharacterBase::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-void ACharacterBase::AddCharacterAbilities() const
-{
-	if (!HasAuthority())
-	{
-		return;
-	}
-
-	const auto AuraAbilitySystemComponent = CastChecked<UAuraAbilitySystemComponent>(AbilitySystemComponent);
-	if (!IsValid(AuraAbilitySystemComponent))
-	{
-		return;
-	}
-
-	AuraAbilitySystemComponent->GrantCharacterAbilities(StartupAbilities);
-}

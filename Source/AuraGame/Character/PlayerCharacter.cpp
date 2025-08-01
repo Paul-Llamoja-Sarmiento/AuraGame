@@ -119,3 +119,19 @@ void APlayerCharacter::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& Eff
 
 	AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data);
 }
+
+void APlayerCharacter::AddCharacterAbilities() const
+{
+	if (!HasAuthority())
+	{
+		return;
+	}
+
+	const auto AuraAbilitySystemComponent = CastChecked<UAuraAbilitySystemComponent>(AbilitySystemComponent);
+	if (!IsValid(AuraAbilitySystemComponent))
+	{
+		return;
+	}
+
+	AuraAbilitySystemComponent->GrantCharacterAbilities(StartupAbilities);
+}

@@ -40,6 +40,8 @@ void UTargetDataUnderCursor::SendMouseCursorData() const
 		return;
 	}
 
+	// TODO: It would be nice if we use a custom ECC_Target in the future.
+	// When you try to target a floor location near a pilar, it takes into account the pilar top position instead
 	FHitResult CursorHitResult;
 	PC->GetHitResultUnderCursor(ECC_Visibility, false, CursorHitResult);
 

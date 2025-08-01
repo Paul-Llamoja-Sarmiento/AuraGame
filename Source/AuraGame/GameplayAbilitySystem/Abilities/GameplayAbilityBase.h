@@ -6,7 +6,9 @@
 #include "GameplayAbilityBase.generated.h"
 
 /**
- * 
+ * @brief Base class for all ability types.
+ *
+ * Provides common minimal functionality.
  */
 UCLASS(Abstract)
 class AURAGAME_API UGameplayAbilityBase : public UGameplayAbility
