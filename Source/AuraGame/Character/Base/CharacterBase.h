@@ -33,6 +33,10 @@ public:
 	
 	virtual int32 IGetCharacterLevel_Implementation() const override;
 	virtual FVector GetCombatSocketLocation() const override;
+	virtual void Die() override { }
+
+	/* Getters */
+	USkeletalMeshComponent* GetWeaponMesh() const { return WeaponMesh; }
 
 protected:
 	UPROPERTY(VisibleAnywhere)

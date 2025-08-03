@@ -4,6 +4,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GameplayEffectExtension.h"
 #include "AuraGame/AuraGameplayTags.h"
+#include "AuraGame/Interaction/CombatInterface.h"
 #include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
 
@@ -95,7 +96,15 @@ void UAuraAttributeSet::HandleIncomingDamage(const FGameplayEffectProperties& Pr
 	SetHealth(FMath::Clamp(NewHealth, 0.0f, GetMaxHealth()));
 
 	const bool bIsFatalDamage = NewHealth <= 0.0f;
-	if (!bIsFatalDamage)
+	if (bIsFatalDamage)
+	{
+		ICombatInterface* CombatInterface = Cast<ICombatInterface>(Properties.TargetAvatarActor);
+		if (CombatInterface)
+		{
+			CombatInterface->Die();
+		}
+	}
+	else
 	{
 		const FGameplayTagContainer ReactionTags(Abilities_HitReaction);
 		Properties.TargetASC->TryActivateAbilitiesByTag(ReactionTags);		

@@ -8,6 +8,8 @@ void UHitReactionBase::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
                                        const FGameplayAbilityActivationInfo ActivationInfo,
                                        const FGameplayEventData* TriggerEventData)
 {
+	// Cache the CharacterAssetProviderInterface if not already set.
+	// This ability's instantiation policy should be set to once per actor.
 	if (CharacterAssetProvider == nullptr)
 	{
 		CharacterAssetProvider = TScriptInterface<ICharacterAssetProviderInterface>(ActorInfo->AvatarActor.Get());

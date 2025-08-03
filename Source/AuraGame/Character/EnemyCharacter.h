@@ -9,6 +9,7 @@
 #include "EnemyCharacter.generated.h"
 
 
+class UDeathHandlerComponent;
 class UCharacterAssetComponent;
 class UEnemyWidgetController;
 class UWidgetComponent;
@@ -32,6 +33,7 @@ public:
 	/* ICombatInterface */
 	
 	virtual int32 IGetCharacterLevel_Implementation() const override { return Level; }
+	virtual void Die() override;
 
 	/* ICharacterAssetsProviderInterface */
 	
@@ -49,6 +51,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UCharacterAssetComponent> CharacterAssetsComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UDeathHandlerComponent> DeathHandlerComponent;
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI|Classes")
 	TSubclassOf<UEnemyWidgetController> EnemyWidgetControllerClass;

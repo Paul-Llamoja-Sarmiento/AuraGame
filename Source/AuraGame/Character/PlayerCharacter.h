@@ -20,8 +20,10 @@ public:
 
 	virtual void OnRep_PlayerState() override;
 
-	// ICombatInterface
+	/* ICombatInterface */
+	
 	virtual int32 IGetCharacterLevel_Implementation() const override;
+	virtual void Die() override { }
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Abilities")

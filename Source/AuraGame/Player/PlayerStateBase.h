@@ -23,12 +23,15 @@ class AURAGAME_API APlayerStateBase : public APlayerState, public IAbilitySystem
 public:
 	APlayerStateBase();
 
-	// IAbilitySystemInterface
+	/* IAbilitySystemInterface */
+	
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
 
-	// ICombatInterface
+	/* ICombatInterface */
+	
 	virtual int32 IGetCharacterLevel_Implementation() const override { return Level; }
 	virtual FVector GetCombatSocketLocation() const override { return FVector::ZeroVector; }
+	virtual void Die() override { }
 
 	UAuraAttributeSet* GetAttributeSet() { return AttributeSet; }
 

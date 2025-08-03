@@ -3,6 +3,7 @@
 
 #include "AuraGame/AuraGame.h"
 #include "AuraGame/Components/CharacterAssetComponent.h"
+#include "AuraGame/Components/DeathHandlerComponent.h"
 #include "AuraGame/GameplayAbilitySystem/AbilityBlueprintFunctionLibrary.h"
 #include "AuraGame/GameplayAbilitySystem/AuraAbilitySystemComponent.h"
 #include "AuraGame/GameplayAbilitySystem/AuraAttributeSet.h"
@@ -23,6 +24,7 @@ AEnemyCharacter::AEnemyCharacter()
 	HealthBarWidget->SetupAttachment(GetRootComponent());
 
 	CharacterAssetsComponent = CreateDefaultSubobject<UCharacterAssetComponent>(TEXT("CharacterAssetsComponent"));
+	DeathHandlerComponent = CreateDefaultSubobject<UDeathHandlerComponent>(TEXT("DeathHandlerComponent"));
 }
 
 void AEnemyCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -46,6 +48,11 @@ void AEnemyCharacter::IUnHighlight_Implementation()
 {
 	GetMesh()->SetRenderCustomDepth(false);
 	WeaponMesh->SetRenderCustomDepth(false);
+}
+
+void AEnemyCharacter::Die()
+{
+	DeathHandlerComponent->HandleDeath();
 }
 
 UCharacterAssetsInfo* AEnemyCharacter::IGetCharacterAssetsInfo_Implementation() const

@@ -1,5 +1,4 @@
-﻿// 
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
@@ -26,4 +25,6 @@ public:
 	int32 IGetCharacterLevel() const;
 
 	virtual FVector GetCombatSocketLocation() const = 0;
+
+	virtual void Die() = 0;
 };
