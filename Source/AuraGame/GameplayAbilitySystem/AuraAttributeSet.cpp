@@ -97,8 +97,7 @@ void UAuraAttributeSet::HandleIncomingDamage(const FGameplayEffectProperties& Pr
 	const bool bIsFatalDamage = NewHealth <= 0.0f;
 	if (!bIsFatalDamage)
 	{
-		FGameplayTagContainer ReactionTags;
-		ReactionTags.AddTag(Abilities_HitReaction);
+		const FGameplayTagContainer ReactionTags(Abilities_HitReaction);
 		Properties.TargetASC->TryActivateAbilitiesByTag(ReactionTags);		
 	}
 }
